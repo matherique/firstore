@@ -2,31 +2,13 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-    provider             = "mysql"
-    url                  = env("DATABASE_URL")
-    referentialIntegrity = "prisma"
+    provider     = "mysql"
+    url          = env("DATABASE_URL")
+    relationMode = "prisma"
 }
 
 generator client {
-    provider        = "prisma-client-js"
-    previewFeatures = ["referentialIntegrity"]
-}
-
-model Cake {
-    id          String      @id @default(cuid())
-    name        String
-    price       Float
-    description String
-    cover_image String?
-    status      Boolean     @default(true)
-    photos      Photos[]
-    OrderCake   OrderCake[]
-}
-
-model Photos {
-    id     String @id @default(cuid())
-    cakeId String
-    cake   Cake   @relation(fields: [cakeId], references: [id])
+    provider = "prisma-client-js"
 }
 
 model User {
@@ -39,34 +21,27 @@ model User {
     updatedAt DateTime @updatedAt
 }
 
-model Order {
-    id        String      @id @default(cuid())
-    quantity  Int
-    client    String
-    address   String
-    phone     String
-    status    Status      @default(PENDING)
-    createdAt DateTime    @default(now())
-    updatedAt DateTime    @updatedAt
-    OrderCake OrderCake[]
+model Products {
+    id        String   @id @default(cuid())
+    name      String
+    price     Float
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    Stock     Stock[]
 }
 
-model OrderCake {
-    id      String @id @default(cuid())
-    orderId String
-    cakeId  String
-    order   Order  @relation(fields: [orderId], references: [id])
-    cake    Cake   @relation(fields: [cakeId], references: [id])
+model Stock {
+    id        String   @id @default(cuid())
+    quantity  Int
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    Product   Products @relation(fields: [productId], references: [id])
+    productId String
+
+    @@index([productId])
 }
 
 enum Role {
     ENPLOYEE
-    MANEGER
-}
-
-enum Status {
-    PENDING
-    PREPARING
-    ONMYWAY
-    DELIVERED
+    ADMINISTRATOR
 }
