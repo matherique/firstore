@@ -18,10 +18,10 @@ type Props = {
 
 function CartIcon({ hasItens }: { hasItens: boolean }) {
   if (hasItens) {
-    return <FaCartPlus size={30} color="#9333ea" />;
+    return <FaCartPlus size={30} color="#FFFFFF" />;
   }
 
-  return <FaShoppingCart size={30} color="#9333ea" />;
+  return <FaShoppingCart size={30} color="#FFFFFF" />;
 }
 
 function Menu() {
@@ -42,11 +42,11 @@ function Menu() {
             <div className="flex flex-col">
               <a
                 href="/perfil"
-                className="text-xl text-purple-500 cursor-pointer"
+                className="text-xl text-pink-500 cursor-pointer"
               >{session.user.name}</a>
               <small
                 onClick={() => signOut()}
-                className="self-end text-sm text-purple-500 cursor-pointer hover:underline"
+                className="self-end text-sm text-pink-500 cursor-pointer hover:underline"
               >
                 Sair
               </small>
@@ -55,10 +55,10 @@ function Menu() {
               <CartIcon hasItens={data ?? false} />
             </Link>
           </div> : (<>
-            <Link href="/criar-conta" className="text-purple-600 hover:text-purple-700 transition duration-300 ease-in-out">
+            <Link href="/criar-conta" className="text-pink-600 hover:text-pink-700 transition duration-300 ease-in-out">
               Criar conta
             </Link>
-            <Link href="/entrar" className="inline-block px-7 py-3 bg-purple-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out">
+            <Link href="/entrar" className="inline-block px-7 py-3 bg-pink-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-pink-700 hover:shadow-lg focus:bg-pink-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-pink-800 active:shadow-lg transition duration-150 ease-in-out">
               Entrar
             </Link>
           </>)}
@@ -84,7 +84,7 @@ export default function Layout({ children, breadcrumb }: Props) {
                       {!isLastItem ? (
                         <a
                           href={item.href}
-                          className="text-purple-600 hover:text-purple-700"
+                          className="text-pink-600 hover:text-pink-700"
                         >
                           {item.label}{" "}
                         </a>

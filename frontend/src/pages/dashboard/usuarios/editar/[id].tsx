@@ -64,7 +64,7 @@ const EditarUsuario: NextPage = () => {
   }, [id, updateUser, error, success])
 
   const inputStyle = useCallback((hasError: boolean) => {
-    let style = `block w-full p-2 text-md font-normal text-gray-700 bg-white bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-purple-600 focus:outline-none`
+    let style = `block w-full p-2 text-md font-normal text-gray-700 bg-white bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-pink-600 focus:outline-none`
 
     if (hasError) return style + ` border-red-500`
     return style + ` border-gray-300`
@@ -80,10 +80,10 @@ const EditarUsuario: NextPage = () => {
 
   return <DashboardLayout>
     <header className="flex gap-2 justify-between mb-5">
-      <h1 className="text-3xl text-purple-500 font-bold">Cadastrar Usuários</h1>
+      <h1 className="text-3xl text-pink-500 font-bold">Cadastrar Usuários</h1>
       <Link
         href="/dashboard/usuarios/listar"
-        className="px-7 py-3 bg-purple-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+        className="px-7 py-3 bg-pink-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-pink-700 hover:shadow-lg focus:bg-pink-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-pink-800 active:shadow-lg transition duration-150 ease-in-out"
       >
         Voltar
       </Link>
@@ -133,7 +133,7 @@ const EditarUsuario: NextPage = () => {
           </div>
           <div className="flex flex-col">
             <button
-              className="inline-block px-7 py-3 bg-purple-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+              className="inline-block px-7 py-3 bg-pink-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-pink-700 hover:shadow-lg focus:bg-pink-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-pink-800 active:shadow-lg transition duration-150 ease-in-out w-full"
             >
               Cadastrar
             </button>
