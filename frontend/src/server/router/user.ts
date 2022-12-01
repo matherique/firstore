@@ -6,31 +6,13 @@ import {
   deleteByIdSchema,
   updateSchema,
 } from "@shared/validations/user";
-import { Role, User } from "@prisma/client";
+import { Profile, User } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { compare, hash } from "@shared/encrypter";
 import { createRouter } from "./context";
 import { z } from "zod";
 
 export const userRouter = createRouter()
-  .mutation("register", {
-    input: signupSchema,
-    async resolve({ input }) {
-      const hashed = await hash(input.password);
-
-      const user = await prisma?.user.create({
-        data: {
-          name: input.name,
-          email: input.email,
-          password: hashed,
-        },
-      });
-
-      if (!user) throw new Error("could not create user");
-
-      return user;
-    },
-  })
   .mutation("login", {
     input: loginSchema,
     async resolve({ input }) {
@@ -74,13 +56,12 @@ export const userRouter = createRouter()
     async resolve({ input }) {
       const hashed = await hash(input.password);
 
-
       const user = await prisma?.user.create({
         data: {
           name: input.name,
           email: input.email,
           password: hashed,
-          role: Role.ENPLOYEE,
+          profile: Profile.ENPLOYEE,
         },
       });
 
@@ -112,7 +93,7 @@ export const userRouter = createRouter()
           data: {
             name: input.name,
             email: input.email,
-            role: input.role as Role,
+            profile: input.profile as Profile,
             password: await hash(input.password)
           }
         });
@@ -122,7 +103,7 @@ export const userRouter = createRouter()
           data: {
             name: input.name,
             email: input.email,
-            role: input.role as Role,
+            profile: input.profile as Profile,
           }
         });
       }

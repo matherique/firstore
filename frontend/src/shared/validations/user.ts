@@ -23,7 +23,7 @@ export const createSchema = z.object({
   name: z.string(),
   email: z.string(),
   password: z.string(),
-  role: z.string().nullable(),
+  profile: z.string().nullable(),
 })
 
 export type CreateUserType = z.infer<typeof createSchema>;
@@ -37,7 +37,7 @@ export const updateSchema = z.object({
   name: z.string(),
   email: z.string(),
   password: z.string(),
-  role: z.string()
+  profile: z.string()
 })
 
 export type UpdateUserType = z.infer<typeof updateSchema>;

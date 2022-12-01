@@ -5,7 +5,8 @@ import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { CreateUserType } from "@shared/validations/user";
 import useAlert from "@hooks/useAlerts";
-import { Role } from "@prisma/client";
+import { Profile } from "@prisma/client";
+import Link from "next/link";
 
 const CadastrarUsuario: NextPage = () => {
   const {
@@ -41,7 +42,15 @@ const CadastrarUsuario: NextPage = () => {
   }, [])
 
   return <DashboardLayout>
-    <h1 className="text-3xl text-pink-500 font-bold">Cadastrar Usuário</h1>
+    <header className="flex gap-2 justify-between mb-5">
+      <h1 className="text-3xl text-pink-500 font-bold">Cadastrar Usuário</h1>
+      <Link
+        href="/dashboard/usuarios/listar"
+        className="px-7 py-3 bg-pink-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-pink-700 hover:shadow-lg focus:bg-pink-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-pink-800 active:shadow-lg transition duration-150 ease-in-out"
+      >
+        Voltar
+      </Link>
+    </header>
     <div className="flex flex-row mt-10 ">
       <form className="w-1/2" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-2">
@@ -73,19 +82,19 @@ const CadastrarUsuario: NextPage = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <label htmlFor="role">Nível</label>
+            <label htmlFor="profile">Perfil</label>
             <select
-              className={inputStyle(!!errors.role)} id="role"
-              {...register("role", { required: true })}
+              className={inputStyle(!!errors.profile)} id="profile"
+              {...register("profile", { required: true })}
             >
-              <option>Escolha um nível de acesso</option>
-              <option value={Role.ENPLOYEE}>Funcionário</option>
-              <option value={Role.MANEGER}>Administrador</option>
+              <option>Escolha um perfil de acesso</option>
+              <option value={Profile.ENPLOYEE}>Funcionário</option>
+              <option value={Profile.ADMINISTRATOR}>Administrador</option>
             </select>
           </div>
           <div className="flex flex-col">
             <button
-              className="inline-block px-7 py-3 bg-pink-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-pink-700 hover:shadow-lg focus:bg-pink-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-pink-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+              className="inline-block px-7 py-3 bg-green-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out w-full"
             >
               Cadastrar
             </button>

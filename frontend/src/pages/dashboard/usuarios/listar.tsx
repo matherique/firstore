@@ -1,7 +1,7 @@
 import DashboardLayout from "@components/dashboard-layout";
 import useAlert from "@hooks/useAlerts";
 import { trpc } from "@shared/trpc";
-import { Role } from "@prisma/client";
+import { Profile } from "@prisma/client";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useCallback, useState } from "react";
@@ -9,9 +9,9 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 
 function getProfile(role: string) {
   switch (role) {
-    case Role.MANEGER:
+    case Profile.ADMINISTRATOR:
       return "Administrador";
-    case Role.ENPLOYEE:
+    case Profile.ENPLOYEE:
       return "Funcionário";
   }
 
@@ -60,7 +60,8 @@ const ListaUsuario: NextPage = () => {
             <th className="w-">Nome</th>
             <th>Email</th>
             <th>Perfil</th>
-            <th></th>
+            <th>Status</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -68,7 +69,8 @@ const ListaUsuario: NextPage = () => {
             <tr key={user.id}>
               <td>{user.name}</td>
               <td>{user.email}</td>
-              <td>{getProfile(user.role)}</td>
+              <td>{getProfile(user.profile)}</td>
+              <td>{user.status ? "Ativo" : "Inativo"}</td>
               <td className="flex items-center gap-2">
                 <Link href={`/dashboard/usuarios/editar/${user.id}`}>
                   <FaEdit size={30} color="#1e40af" />

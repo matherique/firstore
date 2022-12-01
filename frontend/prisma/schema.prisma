@@ -16,7 +16,8 @@ model User {
     name      String
     email     String   @unique
     password  String
-    role      Role     @default(ENPLOYEE)
+    profile   Profile  @default(ENPLOYEE)
+    status    Boolean  @default(true)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
@@ -41,7 +42,7 @@ model Stock {
     @@index([productId])
 }
 
-enum Role {
+enum Profile {
     ENPLOYEE
     ADMINISTRATOR
 }

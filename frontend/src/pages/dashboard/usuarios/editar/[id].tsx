@@ -5,18 +5,18 @@ import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { UpdateUserType } from "@shared/validations/user";
 import useAlert from "@hooks/useAlerts";
-import { Role } from "@prisma/client";
+import { Profile } from "@prisma/client";
 import { useRouter } from "next/router";
 import { FaMeteor } from "react-icons/fa";
 import Link from "next/link";
 
-function toRole(role: string): Role {
-  let res: Role = Role.ENPLOYEE
+function toProfile(profile: string): Profile {
+  let res: Profile = Profile.ENPLOYEE
 
-  if (Role.MANEGER === role) {
-    res = Role.MANEGER;
-  } else if (Role.ENPLOYEE === role) {
-    res = Role.ENPLOYEE
+  if (Profile.ADMINISTRATOR === profile) {
+    res = Profile.ADMINISTRATOR;
+  } else if (Profile.ENPLOYEE === profile) {
+    res = Profile.ENPLOYEE
   }
 
   return res
@@ -44,7 +44,7 @@ const EditarUsuario: NextPage = () => {
     if (!isSuccess) return
     setValue("name", user.name)
     setValue("email", user.email)
-    // setValue("role", user.role)
+    // setValue("profile", user.profile)
   }, [user, isSuccess, setValue])
 
 
@@ -119,23 +119,23 @@ const EditarUsuario: NextPage = () => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <label htmlFor="role">Nível</label>
+            <label htmlFor="profile">Nível</label>
             <select
-              className={inputStyle(!!errors.role)}
-              id="role"
-              {...register("role", { required: true })}
-              defaultValue={toRole(user.role)}
+              className={inputStyle(!!errors.profile)}
+              id="profile"
+              {...register("profile", { required: true })}
+              defaultValue={toProfile(user.profile)}
             >
               <option>Escolha um nível de acesso</option>
-              <option value={Role.ENPLOYEE}>Funcionário</option>
-              <option value={Role.MANEGER}>Administrador</option>
+              <option value={Profile.ENPLOYEE}>Funcionário</option>
+              <option value={Profile.ADMINISTRATOR}>Administrador</option>
             </select>
           </div>
           <div className="flex flex-col">
             <button
-              className="inline-block px-7 py-3 bg-pink-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-pink-700 hover:shadow-lg focus:bg-pink-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-pink-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+              className="inline-block px-7 py-3 bg-green-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out w-full"
             >
-              Cadastrar
+              Salvar
             </button>
           </div>
         </div>

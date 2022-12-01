@@ -1,4 +1,4 @@
-import { PrismaClient, Role } from '@prisma/client'
+import { PrismaClient, Profile } from '@prisma/client'
 import { hash } from 'bcryptjs'
 const prisma = new PrismaClient()
 async function main() {
@@ -11,7 +11,7 @@ async function main() {
       name: 'Matheus Henrique',
       email: 'matherique@gmail.com',
       password: hashed,
-      role: Role.MANEGER,
+      profile: Profile.ADMINISTRATOR
     },
   })
 }
