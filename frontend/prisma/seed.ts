@@ -65,8 +65,16 @@ async function main() {
   }
 
   for (const product of products) {
-    await prisma.product.create({
+    const p = await prisma.product.create({
       data: { ...product }
+    })
+    if (!p) continue;
+
+    await prisma.stock.create({
+      data: {
+        quantity: 100,
+        productId: p.id
+      }
     })
   }
 }
