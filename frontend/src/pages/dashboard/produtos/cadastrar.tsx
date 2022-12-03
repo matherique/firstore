@@ -4,9 +4,11 @@ import { NextPage } from "next";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import useAlert from "@hooks/useAlerts";
-import { Profile } from "@prisma/client";
 import Link from "next/link";
 import { CreateSchema } from "@shared/validations/product";
+import { toCurrency } from "@shared/convert";
+
+type CreateSchemaForm = Omit<CreateSchema, 'price'> & { price: string }
 
 const CadastrarProdutos: NextPage = () => {
   const {
@@ -16,22 +18,24 @@ const CadastrarProdutos: NextPage = () => {
     formState: {
       errors
     },
-  } = useForm<CreateSchema>()
+  } = useForm<CreateSchemaForm>()
 
   const { mutate: createProduct, data } = trpc.useMutation(["product.create"])
   const { success, error } = useAlert()
 
-  const onSubmit = useCallback(async (data: CreateSchema) => {
-    console.log(data)
-    // createProduct(data, {
-    //   onSuccess: () => {
-    //     success("Usuário criado com sucesso!")
-    //   },
-    //   onError: (err) => {
-    //     console.error(err)
-    //     error("Erro ao criar usuário!")
-    //   }
-    // })
+  const onSubmit = useCallback(async (data: CreateSchemaForm) => {
+    createProduct({
+      name: data.name,
+      price: Number(data.price.replace("R$ ", "").replace(/\./g, "").replace(",", "."))
+    }, {
+      onSuccess: () => {
+        success("Produto cadastrado com sucesso")
+      },
+      onError: (err) => {
+        console.error(err)
+        error("Erro ao criar produto")
+      }
+    })
   }, [createProduct, error, success])
 
   const inputStyle = useCallback((hasError: boolean) => {
@@ -70,14 +74,8 @@ const CadastrarProdutos: NextPage = () => {
               id="price"
               {...register("price", {
                 required: true,
-                setValueAs: (value) => Number(value),
                 onChange: (e) => {
-                  if (e.target.value.replace(/\D/g, '').length > 0) {
-                    e.target.value = Number(e.target.value.replace(/\D/g, '')).toLocaleString('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL'
-                    })
-                  }
+                  e.target.value = toCurrency(e.target.value)
                 }
               })}
               className={inputStyle(!!errors.price)}
@@ -93,7 +91,7 @@ const CadastrarProdutos: NextPage = () => {
         </div>
       </form>
     </div>
-  </DashboardLayout >
+  </DashboardLayout>
 }
 
 export default CadastrarProdutos

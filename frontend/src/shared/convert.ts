@@ -20,3 +20,11 @@ export function toBase64(str: ArrayBuffer): string {
 export function toBRL(value: number): string {
   return value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
 }
+
+export function toCurrency(value: string): string {
+  let res = value.replace(/\D/g, "");
+  res = res.replace(/(\d)(\d{2})$/, "$1,$2");
+  res = res.replace(/(?=(\d{3})+(\D))\B/g, ".");
+
+  return "R$ " + res
+}
