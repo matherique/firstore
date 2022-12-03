@@ -1,4 +1,5 @@
 import { Product } from "@prisma/client";
+import { createSchema } from "@shared/validations/product";
 import { z } from "zod";
 import { createRouter } from "./context";
 
@@ -14,11 +15,23 @@ export const productRouter = createRouter().query("getAll", {
 
     if (!products) throw new Error("could not find products")
 
-    console.log(products)
-
     return products
   }
-});
+}).mutation("create", {
+  input: createSchema,
+  async resolve({ input: { name, price } }) {
+    const product = await prisma?.product.create({
+      data: {
+        name,
+        price
+      }
+    })
+
+    if (!product) throw new Error("could not create product")
+
+    return product
+  }
+})
 //   .mutation("login", {
 //     input: loginSchema,
 //     async resolve({ input }) {

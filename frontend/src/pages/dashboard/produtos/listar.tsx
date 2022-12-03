@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useCallback, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
-const ListarEstoque: NextPage = () => {
+const ListarProdutos: NextPage = () => {
   const [query, setQuery] = useState("");
   const { data: products, refetch } = trpc.useQuery(["product.getAll", { query }]);
   // const { mutate: disable } = trpc.useMutation("product.disable");
@@ -26,7 +26,7 @@ const ListarEstoque: NextPage = () => {
     <header className="flex gap-2 justify-between mb-5">
       <h1 className="text-3xl text-pink-500 font-bold">Lista de produtos</h1>
       <Link
-        href="/dashboard/bolos/cadastrar"
+        href="/dashboard/produtos/cadastrar"
         className="px-7 py-3 bg-pink-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-pink-700 hover:shadow-lg focus:bg-pink-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-pink-800 active:shadow-lg transition duration-150 ease-in-out"
       >
         Novo
@@ -70,4 +70,4 @@ const ListarEstoque: NextPage = () => {
   </DashboardLayout >
 }
 
-export default ListarEstoque
+export default ListarProdutos
