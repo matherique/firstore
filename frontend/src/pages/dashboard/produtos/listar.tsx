@@ -5,7 +5,7 @@ import { trpc } from "@shared/trpc";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useCallback, useState } from "react";
-import { FaEdit, FaMeteor, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 const DEFAULT_QUANTITY = 20
 const ListarProdutos: NextPage = () => {
@@ -37,7 +37,7 @@ const ListarProdutos: NextPage = () => {
       <h1 className="text-3xl text-slate-500 font-bold">Lista de produtos</h1>
       <Link
         href="/dashboard/produtos/cadastrar"
-        className="px-7 py-3 bg-slate-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-slate-700 hover:shadow-lg focus:bg-slate-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-slate-800 active:shadow-lg transition duration-150 ease-in-out"
+        className="px-7 py-3 bg-slate-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-slate-800 hover:shadow-lg focus:bg-slate-800 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-slate-800 active:shadow-lg transition duration-150 ease-in-out"
       >
         Novo
       </Link>
@@ -81,7 +81,7 @@ const ListarProdutos: NextPage = () => {
           {
             shouldPrevPage ? (
               <button
-                className="px-7 py-1 bg-slate-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-slate-700 hover:shadow-lg focus:bg-slate-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-slate-800 active:shadow-lg transition duration-150 ease-in-out"
+                className="px-7 py-1 bg-slate-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-slate-800 hover:shadow-lg focus:bg-slate-800 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-slate-800 active:shadow-lg transition duration-150 ease-in-out"
                 onClick={() => setPage(page - 1)}
               >
                 Anterior
@@ -91,7 +91,7 @@ const ListarProdutos: NextPage = () => {
         {
           shouldNextPage ? (
             <button
-              className="px-7 py-1 bg-slate-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-slate-700 hover:shadow-lg focus:bg-slate-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-slate-800 active:shadow-lg transition duration-150 ease-in-out"
+              className="px-7 py-1 bg-slate-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-slate-800 hover:shadow-lg focus:bg-slate-800 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-slate-800 active:shadow-lg transition duration-150 ease-in-out"
               onClick={() => setPage(page + 1)}
             >
               Proximo
