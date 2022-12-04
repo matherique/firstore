@@ -35,18 +35,18 @@ const CadastrarUsuario: NextPage = () => {
   }, [createUser, error, success])
 
   const inputStyle = useCallback((hasError: boolean) => {
-    let style = `block w-full p-2 text-md font-normal text-gray-700 bg-white bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-pink-600 focus:outline-none`
+    let style = `block w-full p-2 text-md font-normal text-slate-700 bg-white bg-clip-padding border border-solid rounded transition ease-in-out m-0 focus:text-slate-700 focus:bg-white focus:border-slate-600 focus:outline-none`
 
     if (hasError) return style + ` border-red-500`
-    return style + ` border-gray-300`
+    return style + ` border-slate-300`
   }, [])
 
   return <DashboardLayout>
     <header className="flex gap-2 justify-between mb-5">
-      <h1 className="text-3xl text-pink-500 font-bold">Cadastrar Usuário</h1>
+      <h1 className="text-3xl text-slate-500 font-bold">Cadastrar Usuário</h1>
       <Link
         href="/dashboard/usuarios/listar"
-        className="px-7 py-3 bg-pink-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-pink-700 hover:shadow-lg focus:bg-pink-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-pink-800 active:shadow-lg transition duration-150 ease-in-out"
+        className="px-7 py-3 bg-slate-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-slate-700 hover:shadow-lg focus:bg-slate-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-slate-800 active:shadow-lg transition duration-150 ease-in-out"
       >
         Voltar
       </Link>

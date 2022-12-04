@@ -30,10 +30,10 @@ function Menu() {
   const { data } = trpc.useQuery(["shopping-cart.hasItens"])
 
   return (
-    <nav className="relative w-full flex flex-wrap items-center justify-between py-4 text-gray-500 hover:text-gray-700 focus:text-gray-700">
+    <nav className="relative w-full flex flex-wrap items-center justify-between py-4 text-slate-500 hover:text-slate-700 focus:text-slate-700">
       <div className="container-fluid w-full flex flex-wrap items-center justify-between">
         <div className="container-fluid basis-1/2">
-          <Link href="/" className="flex items-center text-gray-900 hover:text-gray-900 focus:text-gray-900 mt-2 lg:mt-0 mr-1">
+          <Link href="/" className="flex items-center text-slate-900 hover:text-slate-900 focus:text-slate-900 mt-2 lg:mt-0 mr-1">
             <Image src={Logo} alt="logo" width={200} height={100} />
           </Link>
         </div>
@@ -42,11 +42,11 @@ function Menu() {
             <div className="flex flex-col">
               <a
                 href="/perfil"
-                className="text-xl text-pink-500 cursor-pointer"
+                className="text-xl text-slate-500 cursor-pointer"
               >{session.user.name}</a>
               <small
                 onClick={() => signOut()}
-                className="self-end text-sm text-pink-500 cursor-pointer hover:underline"
+                className="self-end text-sm text-slate-500 cursor-pointer hover:underline"
               >
                 Sair
               </small>
@@ -55,10 +55,10 @@ function Menu() {
               <CartIcon hasItens={data ?? false} />
             </Link>
           </div> : (<>
-            <Link href="/criar-conta" className="text-pink-600 hover:text-pink-700 transition duration-300 ease-in-out">
+            <Link href="/criar-conta" className="text-slate-600 hover:text-slate-700 transition duration-300 ease-in-out">
               Criar conta
             </Link>
-            <Link href="/entrar" className="inline-block px-7 py-3 bg-pink-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-pink-700 hover:shadow-lg focus:bg-pink-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-pink-800 active:shadow-lg transition duration-150 ease-in-out">
+            <Link href="/entrar" className="inline-block px-7 py-3 bg-slate-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-slate-700 hover:shadow-lg focus:bg-slate-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-slate-800 active:shadow-lg transition duration-150 ease-in-out">
               Entrar
             </Link>
           </>)}
@@ -80,11 +80,11 @@ export default function Layout({ children, breadcrumb }: Props) {
                 const isLastItem = index === breadcrumb.length - 1;
                 return (
                   <React.Fragment key={index}>
-                    <li className="text-gray-500">
+                    <li className="text-slate-500">
                       {!isLastItem ? (
                         <a
                           href={item.href}
-                          className="text-pink-600 hover:text-pink-700"
+                          className="text-slate-600 hover:text-slate-700"
                         >
                           {item.label}{" "}
                         </a>
@@ -94,7 +94,7 @@ export default function Layout({ children, breadcrumb }: Props) {
                     </li>
                     {!isLastItem ? (
                       <li>
-                        <span className="text-gray-500 mx-2">{`>`}</span>
+                        <span className="text-slate-500 mx-2">{`>`}</span>
                       </li>
                     ) : null}
                   </React.Fragment>
