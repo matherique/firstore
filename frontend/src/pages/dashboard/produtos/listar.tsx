@@ -8,6 +8,7 @@ import { useCallback, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
 const DEFAULT_QUANTITY = 20
+
 const ListarProdutos: NextPage = () => {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState<number>(1);
@@ -29,7 +30,6 @@ const ListarProdutos: NextPage = () => {
   }, [deleteProduct, refetch, success])
 
   const shouldNextPage = products?.length === DEFAULT_QUANTITY
-  console.log(products?.length, DEFAULT_QUANTITY, shouldNextPage)
   const shouldPrevPage = page > 1
 
   return <DashboardLayout>

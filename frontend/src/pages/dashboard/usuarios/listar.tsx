@@ -18,9 +18,16 @@ function getProfile(role: string) {
   return "Cliente";
 }
 
+const DEFAULT_QUANTITY = 10
+
 const ListaUsuario: NextPage = () => {
   const [query, setQuery] = useState("");
-  const { data: users, refetch } = trpc.useQuery(["user.getAll", { query }]);
+  const [page, setPage] = useState<number>(1);
+  const { data: users, refetch } = trpc.useQuery(["user.getAll", {
+    query,
+    quantity: DEFAULT_QUANTITY,
+    page: page
+  }]);
   const { success, error } = useAlert()
 
   const { mutate: deleteUser } = trpc.useMutation(["user.delete"]);
@@ -34,6 +41,9 @@ const ListaUsuario: NextPage = () => {
       onError: () => { error("Erro ao deletar usuário") }
     });
   }, [deleteUser, error, refetch, success])
+
+  const shouldNextPage = users?.length === DEFAULT_QUANTITY
+  const shouldPrevPage = page > 1
 
   return <DashboardLayout>
     <header className="flex gap-2 justify-between mb-5">
@@ -83,6 +93,28 @@ const ListaUsuario: NextPage = () => {
           ))}
         </tbody>
       </table>
+      <div className="flex mt-5 justify-between">
+        <div>
+          {
+            shouldPrevPage ? (
+              <button
+                className="px-7 py-1 bg-slate-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-slate-800 hover:shadow-lg focus:bg-slate-800 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-slate-800 active:shadow-lg transition duration-150 ease-in-out"
+                onClick={() => setPage(page - 1)}
+              >
+                Anterior
+              </button>) : null
+          }
+        </div>
+        {
+          shouldNextPage ? (
+            <button
+              className="px-7 py-1 bg-slate-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-slate-800 hover:shadow-lg focus:bg-slate-800 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-slate-800 active:shadow-lg transition duration-150 ease-in-out"
+              onClick={() => setPage(page + 1)}
+            >
+              Proximo
+            </button>) : null
+        }
+      </div>
     </div>
   </DashboardLayout >
 }

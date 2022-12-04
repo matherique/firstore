@@ -5,12 +5,12 @@ import {
   createSchema,
   updateSchema,
 } from "@shared/validations/user";
-import { Profile, User } from "@prisma/client";
+import { Prisma, Profile, User } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { compare, hash } from "@shared/encrypter";
 import { createRouter } from "./context";
 import { z } from "zod";
-import { deleteByIdSchema } from "@shared/validations";
+import { deleteByIdSchema, getAllQuerySchema } from "@shared/validations";
 
 export const userRouter = createRouter()
   .mutation("login", {
@@ -38,13 +38,29 @@ export const userRouter = createRouter()
     },
   })
   .query("getAll", {
-    input: searchSchema,
-    async resolve({ input: { query } }) {
+    input: getAllQuerySchema,
+    async resolve({ input: { query, quantity, page } }) {
       let users: User[] | undefined = []
+
+      let common: Prisma.SelectSubset<Prisma.UserFindManyArgs, Prisma.UserFindManyArgs> = {
+        take: quantity,
+        skip: quantity * (page - 1),
+        orderBy: {
+          name: "asc",
+        },
+      }
+
       if (query) {
-        users = await prisma?.user.findMany({ where: { name: { contains: query } } })
+        users = await prisma?.user.findMany({
+          where: {
+            name: {
+              contains: query
+            }
+          },
+          ...common
+        })
       } else {
-        users = await prisma?.user.findMany()
+        users = await prisma?.user.findMany({ ...common })
       }
 
       if (!users) throw new Error("could not find cakes")
