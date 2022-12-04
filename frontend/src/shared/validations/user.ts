@@ -28,9 +28,6 @@ export const createSchema = z.object({
 
 export type CreateUserType = z.infer<typeof createSchema>;
 
-export const deleteByIdSchema = z.object({
-  id: z.string(),
-})
 
 export const updateSchema = z.object({
   id: z.string(),

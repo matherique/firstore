@@ -5,22 +5,32 @@ import { trpc } from "@shared/trpc";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useCallback, useState } from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaMeteor, FaTrash } from "react-icons/fa";
 
+const DEFAULT_QUANTITY = 20
 const ListarProdutos: NextPage = () => {
   const [query, setQuery] = useState("");
-  const { data: products, refetch } = trpc.useQuery(["product.getAll", { query }]);
-  // const { mutate: disable } = trpc.useMutation("product.disable");
+  const [page, setPage] = useState<number>(1);
+  const { data: products, refetch } = trpc.useQuery(["product.getAll", {
+    query,
+    quantity: DEFAULT_QUANTITY,
+    page: page
+  }]);
+  const { mutate: deleteProduct } = trpc.useMutation("product.delete");
   const { success } = useAlert()
 
-  const handleDelete = useCallback(async (id: string) => {
-    // disable({ id }, {
-    //   onSuccess: () => {
-    //     success("Bolo deletado com sucesso")
-    //     refetch()
-    //   }
-    // })
-  }, [])
+  const handleDelete = useCallback((id: string) => {
+    deleteProduct({ id }, {
+      onSuccess: () => {
+        success("Produto deletado com sucesso!")
+        refetch()
+      }
+    })
+  }, [deleteProduct, refetch, success])
+
+  const shouldNextPage = products?.length === DEFAULT_QUANTITY
+  console.log(products?.length, DEFAULT_QUANTITY, shouldNextPage)
+  const shouldPrevPage = page > 1
 
   return <DashboardLayout>
     <header className="flex gap-2 justify-between mb-5">
@@ -63,9 +73,31 @@ const ListarProdutos: NextPage = () => {
                 </span>
               </td>
             </tr>
-          ))}
+          )) || <tr><td colSpan={3}>Nenhum produto encontrado</td></tr>}
         </tbody>
       </table>
+      <div className="flex mt-5 justify-between">
+        <div>
+          {
+            shouldPrevPage ? (
+              <button
+                className="px-7 py-1 bg-pink-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-pink-700 hover:shadow-lg focus:bg-pink-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-pink-800 active:shadow-lg transition duration-150 ease-in-out"
+                onClick={() => setPage(page - 1)}
+              >
+                Anterior
+              </button>) : null
+          }
+        </div>
+        {
+          shouldNextPage ? (
+            <button
+              className="px-7 py-1 bg-pink-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-pink-700 hover:shadow-lg focus:bg-pink-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-pink-800 active:shadow-lg transition duration-150 ease-in-out"
+              onClick={() => setPage(page + 1)}
+            >
+              Proximo
+            </button>) : null
+        }
+      </div>
     </div>
   </DashboardLayout >
 }

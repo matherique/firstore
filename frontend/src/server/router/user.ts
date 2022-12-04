@@ -3,7 +3,6 @@ import {
   searchSchema,
   signupSchema,
   createSchema,
-  deleteByIdSchema,
   updateSchema,
 } from "@shared/validations/user";
 import { Profile, User } from "@prisma/client";
@@ -11,6 +10,7 @@ import { TRPCError } from "@trpc/server";
 import { compare, hash } from "@shared/encrypter";
 import { createRouter } from "./context";
 import { z } from "zod";
+import { deleteByIdSchema } from "@shared/validations";
 
 export const userRouter = createRouter()
   .mutation("login", {
