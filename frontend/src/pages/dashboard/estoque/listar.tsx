@@ -4,22 +4,23 @@ import { trpc } from "@shared/trpc";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useCallback, useState } from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaMinus, FaPlus, FaTrash } from "react-icons/fa";
 
 const ListarEstoque: NextPage = () => {
   const [query, setQuery] = useState("");
-  const { data, refetch } = trpc.useQuery(["cake.getAll", { query }]);
-  const { mutate: disable } = trpc.useMutation("cake.disable");
+  const { data, refetch } = trpc.useQuery(["stock.getAll", { query, quantity: 10, page: 1 }]);
+  // const { mutate: disable } = trpc.useMutation("cake.disable");
   const { success } = useAlert()
 
   const handleDeleteCake = useCallback(async (id: string) => {
-    disable({ id }, {
-      onSuccess: () => {
-        success("Bolo deletado com sucesso")
-        refetch()
-      }
-    })
-  }, [disable, refetch, success])
+    // disable({ id }, {
+    //   onSuccess: () => {
+    //     success("Bolo deletado com sucesso")
+    //     refetch()
+    //   }
+    // })
+    // }, [disable, refetch, success])
+  }, [])
 
   return <DashboardLayout>
     <header className="flex gap-2 justify-between mb-5">
@@ -44,26 +45,22 @@ const ListarEstoque: NextPage = () => {
         <thead className="text-left">
           <tr>
             <th className="w-">Nome</th>
-            <th>Preço</th>
-            <th>Descrição</th>
-            <th>Status</th>
-            <th></th>
+            <th>Quantidade</th>
+            <th>Ação</th>
           </tr>
         </thead>
         <tbody>
-          {data?.map(cake => (
-            <tr key={cake.id}>
-              <td>{cake.name}</td>
-              <td>R$ {cake.price}</td>
-              <td>{cake.description}</td>
-              <td>{cake.status ? "ativo" : "desativado"}</td>
+          {data?.map(item => (
+            <tr key={item.id}>
+              <td>{item.Product.name}</td>
+              <td>{item.quantity}</td>
               <td className="flex items-center gap-2">
-                <Link href={`/dashboard/bolos/editar/${cake.id}`}>
-                  <FaEdit size={30} color="#1e40af" />
+                <Link href={`/dashboard/estoque/editar/${item.id}/adicionar`}>
+                  <FaPlus size={30} color="#14532d" />
                 </Link>
-                <span className="cursor-pointer" onClick={() => handleDeleteCake(cake.id)}>
-                  <FaTrash size={23} color="#991b1b" />
-                </span>
+                <Link href={`/dashboard/estoque/editar/${item.id}/remover`}>
+                  <FaMinus size={23} color="#7f1d1d" />
+                </Link>
               </td>
             </tr>
           ))}
