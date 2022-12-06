@@ -1,10 +1,9 @@
 import DashboardLayout from "@components/dashboard-layout";
-import useAlert from "@hooks/useAlerts";
 import { trpc } from "@shared/trpc";
 import { NextPage } from "next";
 import Link from "next/link";
-import { useCallback, useState } from "react";
-import { FaEdit, FaMinus, FaPen, FaPlus, FaTrash } from "react-icons/fa";
+import { useState } from "react";
+import { FaPen } from "react-icons/fa";
 
 const DEFAULT_QUANTITY = 20
 

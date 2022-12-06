@@ -1,6 +1,6 @@
 import { Prisma, Product } from "@prisma/client";
 import { getAllQuerySchema, getByIdSchema } from "@shared/validations";
-import { createSchema } from "@shared/validations/product";
+import { createSchema, updateProductSchema } from "@shared/validations/product";
 import { deleteByIdSchema } from "@shared/validations";
 import { createRouter } from "./context";
 
@@ -76,5 +76,20 @@ export const productRouter = createRouter().query("getAll", {
     })
 
     return { ...product, quantity: stock?.[0]?._sum?.quantity || 0 }
+  }
+}).mutation("update", {
+  input: updateProductSchema,
+  async resolve({ input }) {
+    const product = await prisma?.product.update({
+      where: { id: input.id },
+      data: {
+        name: input.name,
+        price: input.price
+      }
+    })
+
+    if (!product) throw new Error("could not update product")
+
+    return product
   }
 })
