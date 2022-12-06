@@ -1,5 +1,5 @@
 import { Prisma, Product } from "@prisma/client";
-import { getAllQuerySchema } from "@shared/validations";
+import { getAllQuerySchema, getByIdSchema } from "@shared/validations";
 import { createSchema } from "@shared/validations/product";
 import { deleteByIdSchema } from "@shared/validations";
 import { createRouter } from "./context";
@@ -54,5 +54,27 @@ export const productRouter = createRouter().query("getAll", {
   input: deleteByIdSchema,
   async resolve({ input }) {
     await prisma?.product.delete({ where: { id: input.id } })
+  }
+}).query("get", {
+  input: getByIdSchema,
+  async resolve({ input }) {
+    const product = await prisma?.product.findUnique({ where: { id: input.id } })
+
+    if (!product) throw new Error("could not find product")
+
+    // get stock sum of product
+    const stock = await prisma?.stock.groupBy({
+      by: ["productId"],
+      _sum: {
+        quantity: true
+      },
+      where: {
+        productId: {
+          in: [product.id]
+        }
+      }
+    })
+
+    return { ...product, quantity: stock?.[0]?._sum?.quantity || 0 }
   }
 })

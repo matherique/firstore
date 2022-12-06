@@ -9,3 +9,7 @@ export const getAllQuerySchema = z.object({
 export const deleteByIdSchema = z.object({
   id: z.string(),
 })
+
+export const getByIdSchema = z.object({
+  id: z.string(),
+})
