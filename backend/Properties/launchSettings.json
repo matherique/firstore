@@ -20,8 +20,7 @@
     "backend": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
-      "applicationUrl": "http://localhost:5000",
+      "applicationUrl": "http://localhost:1355",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
