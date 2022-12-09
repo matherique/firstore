@@ -6,7 +6,11 @@ import { createRouter } from "./context";
 
 export const productRouter = createRouter().query("getAll", {
   input: getAllQuerySchema,
-  async resolve({ input: { query, quantity, page } }) {
+  async resolve(req) {
+    const { input: { query, quantity, page } } = req
+
+    console.log(req.ctx.req.cookies["next-auth.session-token"])
+
     let products: Product[] | undefined = []
 
     let common: Prisma.SelectSubset<Prisma.ProductFindManyArgs, Prisma.ProductFindManyArgs> = {

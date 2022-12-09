@@ -70,20 +70,22 @@ export const userRouter = createRouter()
   }).mutation("create", {
     input: createSchema,
     async resolve({ input }) {
-      const hashed = await hash(input.password);
-
-      const user = await prisma?.user.create({
-        data: {
+      const result = await fetch("http://localhost:1355/user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
           name: input.name,
           email: input.email,
-          password: hashed,
-          profile: Profile.ENPLOYEE,
-        },
-      });
+          password: input.password,
+          profile: input.profile,
+        }),
+      }).catch((err) => console.log(err))
 
-      if (!user) throw new Error("could not create user");
+      if (!result) throw new Error("could not create user")
 
-      return user;
+      return await result.json()
     },
   }).mutation("delete", {
     input: deleteByIdSchema,
@@ -102,30 +104,47 @@ export const userRouter = createRouter()
   }).mutation("update", {
     input: updateSchema,
     async resolve({ input }) {
-      let user: User | undefined = undefined;
-      if (input.password) {
-        user = await prisma?.user.update({
-          where: { id: input.id },
-          data: {
-            name: input.name,
-            email: input.email,
-            profile: input.profile as Profile,
-            password: await hash(input.password)
-          }
-        });
-      } else {
-        user = await prisma?.user.update({
-          where: { id: input.id },
-          data: {
-            name: input.name,
-            email: input.email,
-            profile: input.profile as Profile,
-          }
-        });
-      }
+      const result = await fetch(`http://localhost:1355/user/${input.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: input.name,
+          email: input.email,
+          password: input.password,
+          profile: input.profile,
+        }),
+      }).catch((err) => console.log(err))
 
-      if (!user) throw new Error("could not update user");
+      if (!result) throw new Error("could not update user")
 
-      return user;
+      return await result.json()
+
+      // let user: User | undefined = undefined;
+      // if (input.password) {
+      //   user = await prisma?.user.update({
+      //     where: { id: input.id },
+      //     data: {
+      //       name: input.name,
+      //       email: input.email,
+      //       profile: input.profile as Profile,
+      //       password: await hash(input.password)
+      //     }
+      //   });
+      // } else {
+      //   user = await prisma?.user.update({
+      //     where: { id: input.id },
+      //     data: {
+      //       name: input.name,
+      //       email: input.email,
+      //       profile: input.profile as Profile,
+      //     }
+      //   });
+      // }
+
+      // if (!user) throw new Error("could not update user");
+
+      // return user;
     }
   })

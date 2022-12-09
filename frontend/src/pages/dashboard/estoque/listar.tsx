@@ -35,7 +35,7 @@ const ListarEstoque: NextPage = () => {
       <table className="w-full table-auto">
         <thead className="text-left">
           <tr>
-            <th className="w-">Nome</th>
+            <th>Nome</th>
             <th>Quantidade</th>
             <th>Ação</th>
           </tr>
