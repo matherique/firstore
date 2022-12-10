@@ -15,4 +15,10 @@ namespace backend.Controllers
         public string password { get; set; }
         public string profile { get; set; }
     }
+
+    public class LoginRequest
+    {
+        public string email { get; set; }
+        public string password { get; set; }
+    }
 }

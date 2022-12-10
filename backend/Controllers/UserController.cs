@@ -53,12 +53,14 @@ namespace backend.Controllers
             {
                 Guid id = System.Guid.NewGuid();
 
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(req.password);
+
                 User newuser = new User
                 {
                     id = id.ToString("n"),
                     name = req.name,
                     email = req.email,
-                    password = req.password,
+                    password = hashedPassword,
                     profile = req.profile,
                     status = true,
                     createdAt = DateTime.Now,
@@ -88,9 +90,14 @@ namespace backend.Controllers
 
                 user.name = req.name;
                 user.email = req.email;
-                user.password = req.password;
                 user.profile = req.profile;
                 user.updatedAt = DateTime.Now;
+
+                if (req.password != null)
+                {
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(req.password);
+                    user.password = hashedPassword;
+                }
 
                 await _context.SaveChangesAsync();
 
@@ -124,6 +131,32 @@ namespace backend.Controllers
                 return BadRequest(e);
             }
 
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<User>> login([FromBody] LoginRequest req)
+        {
+            try
+            {
+                User user = await _context.User.FirstOrDefaultAsync(m => m.email == req.email);
+
+                if (user == null)
+                {
+                    return BadRequest("email ou senha inválidos");
+                }
+
+                if (!BCrypt.Net.BCrypt.Verify(req.password, user.password))
+                {
+                    return BadRequest("email ou senha inválidos");
+                }
+
+                return Ok(user);
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
         }
     }
 }
