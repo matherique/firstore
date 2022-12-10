@@ -1,8 +1,6 @@
 import { loginSchema } from "@shared/validations/user";
-import { compare } from "@shared/encrypter";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { prisma } from "@server/db/client"
 import { User } from "@prisma/client";
 
 export const nextAuthConfig: NextAuthOptions = {
@@ -73,8 +71,7 @@ export const nextAuthConfig: NextAuthOptions = {
     maxAge: 15 * 24 * 30 * 60, // 15 days
   },
   pages: {
-    signIn: "/criar-conta",
-    newUser: "/entrar",
+    signIn: "/",
   },
   debug: true,
 };

@@ -6,15 +6,29 @@ import { useForm } from "react-hook-form";
 import { loginSchema, LoginSchemaType } from "@shared/validations/user";
 import { signIn } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useAlert from "@hooks/useAlerts";
+import { useRouter } from "next/router";
+import { join } from "path";
 
 const Home: NextPage = () => {
+  const route = useRouter()
   const { register, handleSubmit } = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
 
+  const { error } = useAlert()
+
   const onSubmit = React.useCallback(async (data: LoginSchemaType) => {
-    await signIn("credentials", { ...data, callbackUrl: "/dashboard/" });
-  }, [])
+    const resp = await signIn("credentials", { ...data, callbackUrl: "/dashboard/", redirect: false });
+
+    if (!resp?.ok) {
+      error("Email ou senha inválidos")
+      return
+    }
+
+    route.push("/dashboard")
+
+  }, [error, route])
 
   return (
     <section className="h-screen">
