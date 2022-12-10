@@ -93,6 +93,7 @@ namespace backend.Controllers
                 user.profile = req.profile;
                 user.updatedAt = DateTime.Now;
 
+
                 if (req.password != null)
                 {
                     string hashedPassword = BCrypt.Net.BCrypt.HashPassword(req.password);
@@ -133,7 +134,8 @@ namespace backend.Controllers
 
         }
 
-        [HttpPost("login")]
+        [Route("login")]
+        [HttpPost()]
         public async Task<ActionResult<User>> login([FromBody] LoginRequest req)
         {
             try

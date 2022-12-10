@@ -3,6 +3,7 @@ import { compare } from "@shared/encrypter";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@server/db/client"
+import { User } from "@prisma/client";
 
 export const nextAuthConfig: NextAuthOptions = {
   providers: [
@@ -19,17 +20,26 @@ export const nextAuthConfig: NextAuthOptions = {
       async authorize(credentials, req) {
         const creds = await loginSchema.parseAsync(credentials);
 
-        const user = await prisma.user.findFirst({
-          where: { email: creds.email },
-        });
+        const result = await fetch("http://localhost:1355/user/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: creds.email,
+            password: creds.password,
+          }),
+        }).catch((err) => console.log(err))
 
-        if (!user) {
+        if (!result) {
           return null;
         }
 
-        if (!compare(user.password, creds.password)) {
-          return null;
+        if (result.status !== 200) {
+          return null
         }
+
+        const user = await result.json() as User
 
         return {
           id: user.id,
