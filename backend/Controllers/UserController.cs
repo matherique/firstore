@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using backend.Models;
 
@@ -22,9 +20,23 @@ namespace backend.Controllers
 
         // GET: User
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> index([FromQuery] string query, [FromQuery] int page, [FromQuery] int quantity)
         {
-            return Ok(await _context.User.ToListAsync());
+            if (query == null)
+            {
+                query = "";
+            }
+
+            int skip = quantity * (page - 1);
+
+            User[] users = await _context.User
+                .Where(m => m.name.ToLower().Contains(query))
+                .OrderBy(m => m.name)
+                .Skip(skip)
+                .Take(quantity)
+                .ToArrayAsync();
+
+            return Ok(users);
         }
 
         // GET: User/5
