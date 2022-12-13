@@ -27,6 +27,16 @@ namespace backend.Controllers
                 query = "";
             }
 
+            if (quantity == 0)
+            {
+                quantity = 20;
+            }
+
+            if (page == 0)
+            {
+                page = 1;
+            }
+
             int skip = quantity * (page - 1);
 
             User[] users = await _context.User
@@ -59,7 +69,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> creage([FromBody] CreateUserRequest req)
+        public async Task<ActionResult<User>> create([FromBody] CreateUserRequest req)
         {
             try
             {
@@ -91,7 +101,6 @@ namespace backend.Controllers
                 return BadRequest(e);
             }
         }
-
 
         [HttpPut("{id}")]
         public async Task<ActionResult<User>> edit([FromBody] EditUserRequest req, string id)
