@@ -5,7 +5,7 @@ import {
   createSchema,
   updateSchema,
 } from "@shared/validations/user";
-import { User } from "@prisma/client";
+import { Product, User } from "@prisma/client";
 import { createRouter } from "./context";
 import { z } from "zod";
 import { deleteByIdSchema, getAllQuerySchema } from "@shared/validations";
@@ -54,16 +54,30 @@ export const userRouter = createRouter()
   }).mutation("delete", {
     input: deleteByIdSchema,
     async resolve({ input }) {
-      await prisma?.user.delete({ where: { id: input.id } })
+      const result = await fetch(`http://localhost:1355/user/${input.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).catch((err) => console.log(err))
+
+      if (!result) throw new Error("could not delete user")
+
+      return await result.json()
     }
   }).query("get", {
     input: z.string(),
     async resolve({ input: id }) {
-      const user = await prisma?.user.findUnique({ where: { id } })
+      const result = await fetch(`http://localhost:1355/user/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).catch((err) => console.log(err))
 
-      if (!user) throw new Error("could not find user")
+      if (!result) throw new Error("could not delete user")
 
-      return user
+      return await result.json() as Product
     }
   }).mutation("update", {
     input: updateSchema,
@@ -83,6 +97,6 @@ export const userRouter = createRouter()
 
       if (!result) throw new Error("could not update user")
 
-      return await result.json()
+      return await result.json() as Product
     }
   })

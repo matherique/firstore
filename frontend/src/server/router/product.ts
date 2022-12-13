@@ -4,96 +4,90 @@ import { createSchema, updateProductSchema } from "@shared/validations/product";
 import { deleteByIdSchema } from "@shared/validations";
 import { createRouter } from "./context";
 
+type ProductWithQuantity = Product & { quantity: number }
+
 export const productRouter = createRouter().query("getAll", {
   input: getAllQuerySchema,
   async resolve(req) {
     const { input: { query, quantity, page } } = req
 
-    console.log(req.ctx.req.cookies["next-auth.session-token"])
+    const url = new URL("http://localhost:1355/product")
+    url.searchParams.set("query", query!)
+    url.searchParams.set("quantity", quantity.toString())
+    url.searchParams.set("page", page.toString())
 
-    let products: Product[] | undefined = []
-
-    let common: Prisma.SelectSubset<Prisma.ProductFindManyArgs, Prisma.ProductFindManyArgs> = {
-      take: quantity,
-      skip: quantity * (page - 1),
-      orderBy: {
-        name: "asc",
+    const result = await fetch(url.toString(), {
+      headers: {
+        "Content-Type": "application/json",
       },
-    }
+    }).catch((err) => console.log(err))
 
-    if (query) {
-      products = await prisma?.product.findMany({
-        where: {
-          name: {
-            contains: query
-          }
-        },
-        ...common
-      })
-    } else {
-      products = await prisma?.product.findMany({
-        ...common
-      })
-    }
+    if (!result) throw new Error("could not get products")
 
-    if (!products) throw new Error("could not find products")
-
-    return products
+    return await result.json() as Product[]
   }
 }).mutation("create", {
   input: createSchema,
   async resolve({ input: { name, price } }) {
-    const product = await prisma?.product.create({
-      data: {
-        name,
-        price
-      }
-    })
+    const result = await fetch(`http://localhost:1355/product`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        price: price,
+      }),
+    }).catch((err) => console.log(err))
 
-    if (!product) throw new Error("could not create product")
+    if (!result) throw new Error("could not create product")
 
-    return product
+    return await result.json() as Product
   }
 }).mutation("delete", {
   input: deleteByIdSchema,
   async resolve({ input }) {
-    await prisma?.product.delete({ where: { id: input.id } })
+    const result = await fetch(`http://localhost:1355/product/${input.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).catch((err) => console.log(err))
+
+    if (!result) throw new Error("could not delete product")
+
+    return await result.json()
   }
 }).query("get", {
   input: getByIdSchema,
   async resolve({ input }) {
-    const product = await prisma?.product.findUnique({ where: { id: input.id } })
-
-    if (!product) throw new Error("could not find product")
-
-    // get stock sum of product
-    const stock = await prisma?.stock.groupBy({
-      by: ["productId"],
-      _sum: {
-        quantity: true
+    const result = await fetch(`http://localhost:1355/product/${input.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
       },
-      where: {
-        productId: {
-          in: [product.id]
-        }
-      }
-    })
+    }).catch((err) => console.log(err))
 
-    return { ...product, quantity: stock?.[0]?._sum?.quantity || 0 }
+    if (!result) throw new Error("could not delete product")
+
+    return await result.json() as ProductWithQuantity
   }
 }).mutation("update", {
   input: updateProductSchema,
   async resolve({ input }) {
-    const product = await prisma?.product.update({
-      where: { id: input.id },
-      data: {
+    const result = await fetch(`http://localhost:1355/product/${input.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         name: input.name,
-        price: input.price
-      }
-    })
+        price: input.price,
+      }),
+    }).catch((err) => console.log(err))
 
-    if (!product) throw new Error("could not update product")
+    if (!result) throw new Error("could not update product")
 
-    return product
+    return await result.json() as Product
   }
 })
