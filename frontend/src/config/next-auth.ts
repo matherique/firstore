@@ -42,7 +42,8 @@ export const nextAuthConfig: NextAuthOptions = {
         return {
           id: user.id,
           email: user.email,
-          name: user.name
+          name: user.name,
+          profile: user.profile,
         };
       },
     }),
@@ -53,6 +54,7 @@ export const nextAuthConfig: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.email = user.email;
+        token.profile = user.profile;
       }
 
       return token;
@@ -60,6 +62,7 @@ export const nextAuthConfig: NextAuthOptions = {
     session: async ({ session, token }) => {
       if (token) {
         session.id = token.id as string;
+        session.user.profile = token.profile as string;
       }
 
       return session;

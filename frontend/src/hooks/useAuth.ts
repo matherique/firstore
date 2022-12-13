@@ -12,6 +12,7 @@ export default function useAuth() {
 
   return {
     isLoggedIn,
-    id
+    id,
+    user: session?.user,
   }
 }

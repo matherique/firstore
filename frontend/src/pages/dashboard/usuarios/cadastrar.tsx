@@ -7,6 +7,7 @@ import { CreateUserType } from "@shared/validations/user";
 import useAlert from "@hooks/useAlerts";
 import { Profile } from "@prisma/client";
 import Link from "next/link";
+import useAuth from "@hooks/useAuth";
 
 const CadastrarUsuario: NextPage = () => {
   const {
@@ -20,6 +21,10 @@ const CadastrarUsuario: NextPage = () => {
 
   const { mutate: createUser, data } = trpc.useMutation(["user.create"])
   const { success, error } = useAlert()
+
+  const { user } = useAuth();
+
+  console.log({ user })
 
   const onSubmit = useCallback(async (data: CreateUserType) => {
     console.log(data)
