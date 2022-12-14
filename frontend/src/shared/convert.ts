@@ -1,3 +1,6 @@
+import { Profile } from "@prisma/client";
+import { profile } from "console";
+
 export async function toArrayBuffer(file: File): Promise<ArrayBuffer> {
   return await file!.arrayBuffer();
 }
@@ -27,4 +30,15 @@ export function toCurrency(value: string): string {
   res = res.replace(/(?=(\d{3})+(\D))\B/g, ".");
 
   return "R$ " + res
+}
+
+export function toProfilePTBR(value: string): string {
+  switch (value) {
+    case Profile.ADMINISTRATOR:
+      return "Administrador"
+    case Profile.ENPLOYEE:
+      return "Funcionário"
+    default:
+      return value
+  }
 }

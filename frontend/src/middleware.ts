@@ -16,7 +16,7 @@ export default withAuth(
     },
 
     pages: {
-      signIn: "/entrar",
+      signIn: "/",
     },
   }
 )

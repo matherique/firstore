@@ -1,10 +1,12 @@
 import Image from "next/image";
 import Logo from "@public/logo.png";
-import { FaUserFriends, FaBox, FaShoppingBag } from "react-icons/fa";
+import { FaUserFriends, FaBox, FaShoppingBag, FaUser } from "react-icons/fa";
 import Link from "next/link";
 import useAuth from "@hooks/useAuth";
 import { profile } from "console";
 import { Profile } from "@prisma/client";
+import { signOut } from "next-auth/react";
+import { toProfilePTBR } from "@shared/convert";
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
@@ -13,9 +15,26 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
     <div className="flex w-screen h-screen">
       <aside className="w-72 bg-[#000000]" aria-label="Sidebar">
         <div className="overflow-y-auto py-4 px-3">
-          <a href="" className="flex items-center pl-2.5 mb-5">
+          <a href="" className="flex items-center pl-2.5 mb-5 w-full">
             <Image src={Logo} alt="logo" width={200} height={100} />
           </a>
+          <div className="flex items-center pl-2.5 mb-5">
+            <div className="flex items-center justify-center rounded-full p-3 bg-slate-800">
+              <FaUser size={20} color="#fff" />
+            </div>
+            <div className="ml-3 w-full">
+              <div className="text-base font-medium text-white w-full">
+                {user?.name}
+              </div>
+              <div className="text-sm font-medium text-slate-400 w-full">
+                {toProfilePTBR(user?.profile || "")}
+              </div>
+              <p onClick={() => signOut({ callbackUrl: "/" })} className="text-sm font-medium text-white hover:underline cursor-pointer">
+                Sair
+              </p>
+            </div>
+          </div>
+
           <ul className="space-y-2">
             <li>
               <Link
