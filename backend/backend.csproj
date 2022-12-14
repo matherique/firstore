@@ -18,6 +18,7 @@
     <None Remove="Newtonsoft.Json" />
     <None Remove="BCrypt.Net-Next" />
     <None Remove="BCrypt.Net-Core" />
+    <None Remove="iTextSharp.LGPLv2.Core" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MySql.Data" Version="8.0.31" />
@@ -37,5 +38,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
+    <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.9.4" />
   </ItemGroup>
 </Project>

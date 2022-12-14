@@ -5,6 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using backend.Models;
 using System.Collections.Generic;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.IO;
+using System.Net.Http;
+using System.Net;
 
 namespace backend.Controllers
 {
@@ -47,8 +52,6 @@ namespace backend.Controllers
                 .Take(quantity)
                 .ToArrayAsync();
 
-            string[] productsIds = products.Select(p => p.id).ToArray();
-
 
             Stock[] stocks = await _context.Stock.GroupBy(m => m.productId)
                 .Select(m => new Stock { productId = m.Key, quantity = m.Sum(m => m.quantity) })
@@ -60,7 +63,7 @@ namespace backend.Controllers
             {
                 Stock stock = stocks.FirstOrDefault(m => m.productId == products[i].id);
 
-                if (maxQuantity > 0 && stock != null && stock.quantity > maxQuantity)
+                if (maxQuantity > 0 && stock.quantity > maxQuantity)
                 {
                     continue;
                 }
@@ -119,48 +122,87 @@ namespace backend.Controllers
             }
         }
 
-        // [HttpPut("{id}")]
-        // public async Task<ActionResult<Stock>> edit([FromBody] EditStockRequest req, string id)
-        // {
-        //     try
-        //     {
-        //         Stock product = await _context.Stock.FindAsync(id);
+        [Route("report")]
+        [HttpGet]
+        public async Task<ActionResult> report()
+        {
 
-        //         product.name = req.name;
-        //         product.price = req.price;
-        //         product.updatedAt = DateTime.Now;
+            Product[] products = await _context.Product
+                .OrderBy(m => m.name)
+                .ToArrayAsync();
 
 
-        //         await _context.SaveChangesAsync();
+            Stock[] stocks = await _context.Stock.GroupBy(m => m.productId)
+               .Select(m => new Stock { productId = m.Key, quantity = m.Sum(m => m.quantity) })
+               .ToArrayAsync();
 
-        //         return Ok(product);
+            List<GetProductResponse> response = new List<GetProductResponse>();
 
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         return BadRequest(e);
-        //     }
+            for (int i = 0; i < products.Length; i++)
+            {
+                Stock stock = stocks.FirstOrDefault(m => m.productId == products[i].id);
 
-        // }
+                response.Add(new GetProductResponse
+                {
+                    id = products[i].id,
+                    name = products[i].name,
+                    price = products[i].price,
+                    quantity = stock != null ? stock.quantity : 0
+                });
+            }
 
-        // [HttpDelete("{id}")]
-        // public async Task<ActionResult> delete(string id)
-        // {
-        //     try
-        //     {
-        //         Stock product = await _context.Stock.FindAsync(id);
+            float pxPerMm = 72 / 25.2F;
+            Document doc = new Document(PageSize.A4, 15 * pxPerMm, 15 * pxPerMm, 15 * pxPerMm, 20 * pxPerMm);
+            string filename = $"stock.{DateTime.Now.ToString("yyyy.MM.dd.HH.mm.ss")}.pdf";
+            FileStream file = new FileStream(filename, FileMode.Create);
+            PdfWriter writer = PdfWriter.GetInstance(doc, file);
+            doc.Open();
 
-        //         _context.Stock.Remove(product);
+            BaseFont baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            Paragraph title = new Paragraph("Relatório do estoque", new Font(baseFont, 32, Font.BOLD, BaseColor.Black));
+            title.Alignment = Element.ALIGN_CENTER;
+            title.SpacingAfter = 10;
+            doc.Add(title);
 
-        //         await _context.SaveChangesAsync();
+            var applyStyles = new Action<PdfPCell>((cell) =>
+            {
+                cell.HorizontalAlignment = PdfPCell.ALIGN_LEFT;
+                cell.VerticalAlignment = PdfPCell.ALIGN_MIDDLE;
+                cell.Border = 0;
+                cell.BorderWidthBottom = 1;
+                cell.FixedHeight = 25;
+            });
 
-        //         return Ok();
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         return BadRequest(e);
-        //     }
+            PdfPTable table = new PdfPTable(2);
+            table.SetWidths(new float[] { 1, 1 });
+            table.WidthPercentage = 100;
 
-        // }
+            var nome = new PdfPCell(new Phrase("Nome produto", new Font(baseFont, 16, Font.BOLD, BaseColor.Black)));
+            var quantidade = new PdfPCell(new Phrase("Quantidade", new Font(baseFont, 16, Font.BOLD, BaseColor.Black)));
+
+            applyStyles(nome);
+            applyStyles(quantidade);
+
+            table.AddCell(nome);
+            table.AddCell(quantidade);
+
+            foreach (var item in response)
+            {
+                var nomeProduto = new PdfPCell(new Phrase(item.name, new Font(baseFont, 16, Font.NORMAL, BaseColor.Black)));
+                var quantidadeProduto = new PdfPCell(new Phrase(item.quantity.ToString(), new Font(baseFont, 16, Font.NORMAL, BaseColor.Black)));
+
+                applyStyles(nomeProduto);
+                applyStyles(quantidadeProduto);
+
+                table.AddCell(nomeProduto);
+                table.AddCell(quantidadeProduto);
+            }
+
+            doc.Add(table);
+            doc.Close();
+            file.Close();
+
+            return Ok();
+        }
     }
 }
