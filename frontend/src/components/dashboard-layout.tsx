@@ -78,7 +78,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
             {user?.profile === Profile.ADMINISTRATOR ? (
               <li>
                 <Link
-                  href="/dashboard/relatórios/listar"
+                  href="/dashboard/relatorios/listar"
                   className="group flex items-center p-2 text-base font-normal text-slate-900 rounded-lg dark:text-white hover:bg-slate-800 dark:hover:bg-slate-800 hover:text-white"
                 >
                   <FaFileAlt size={26} color="#FFFFFF" />

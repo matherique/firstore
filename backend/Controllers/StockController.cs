@@ -200,9 +200,19 @@ namespace backend.Controllers
 
             doc.Add(table);
             doc.Close();
-            file.Close();
 
-            return Ok();
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), filename);
+
+            var memoryStream = new MemoryStream();
+
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                await stream.CopyToAsync(memoryStream);
+            }
+            memoryStream.Position = 0;
+
+            file.Close();
+            return File(memoryStream, "application/pdf", Path.GetFileName(filePath));
         }
     }
 }
