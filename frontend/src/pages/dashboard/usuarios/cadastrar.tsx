@@ -1,19 +1,18 @@
 import DashboardLayout from "@components/dashboard-layout";
 import { trpc } from "@shared/trpc";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { CreateUserType } from "@shared/validations/user";
 import useAlert from "@hooks/useAlerts";
 import { Profile } from "@prisma/client";
 import Link from "next/link";
-import useAuth from "@hooks/useAuth";
+import { adminOnlyPage } from "@shared/auth";
 
 const CadastrarUsuario: NextPage = () => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: {
       errors
     },
@@ -22,9 +21,6 @@ const CadastrarUsuario: NextPage = () => {
   const { mutate: createUser, data } = trpc.useMutation(["user.create"])
   const { success, error } = useAlert()
 
-  const { user } = useAuth();
-
-  console.log({ user })
 
   const onSubmit = useCallback(async (data: CreateUserType) => {
     console.log(data)
@@ -108,6 +104,10 @@ const CadastrarUsuario: NextPage = () => {
       </form>
     </div>
   </DashboardLayout >
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return adminOnlyPage(context)
 }
 
 export default CadastrarUsuario

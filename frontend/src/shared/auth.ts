@@ -1,13 +1,23 @@
+import { Profile } from '@prisma/client';
 import { GetServerSideProps } from 'next'
 import { getSession } from 'next-auth/react'
 
-const privateRoute: GetServerSideProps = async (context) => {
+export const adminOnlyPage: GetServerSideProps = async (context) => {
   const session = await getSession(context);
 
   if (!session) {
     return {
       redirect: {
-        destination: "/dashboard/login",
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  if (session.user.profile !== Profile.ADMINISTRATOR) {
+    return {
+      redirect: {
+        destination: "/dashboard",
         permanent: false,
       },
     };
@@ -17,5 +27,3 @@ const privateRoute: GetServerSideProps = async (context) => {
     props: {},
   };
 }
-
-export default privateRoute

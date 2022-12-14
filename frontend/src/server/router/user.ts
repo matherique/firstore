@@ -49,7 +49,7 @@ export const userRouter = createRouter()
 
       if (!result) throw new Error("could not create user")
 
-      return await result.json()
+      return await result.json() as User
     },
   }).mutation("delete", {
     input: deleteByIdSchema,
@@ -77,7 +77,7 @@ export const userRouter = createRouter()
 
       if (!result) throw new Error("could not delete user")
 
-      return await result.json() as Product
+      return await result.json() as User
     }
   }).mutation("update", {
     input: updateSchema,
@@ -97,6 +97,6 @@ export const userRouter = createRouter()
 
       if (!result) throw new Error("could not update user")
 
-      return await result.json() as Product
+      return await result.json() as User
     }
   })

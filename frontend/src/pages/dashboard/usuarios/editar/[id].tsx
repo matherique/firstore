@@ -1,6 +1,6 @@
 import DashboardLayout from "@components/dashboard-layout";
 import { trpc } from "@shared/trpc";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { UpdateUserType } from "@shared/validations/user";
@@ -9,6 +9,7 @@ import { Profile } from "@prisma/client";
 import { useRouter } from "next/router";
 import { FaMeteor } from "react-icons/fa";
 import Link from "next/link";
+import { adminOnlyPage } from "@shared/auth";
 
 function toProfile(profile: string): Profile {
   let res: Profile = Profile.ENPLOYEE
@@ -142,6 +143,10 @@ const EditarUsuario: NextPage = () => {
       </form>
     </div>
   </DashboardLayout >
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return adminOnlyPage(context)
 }
 
 export default EditarUsuario

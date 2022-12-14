@@ -2,10 +2,11 @@ import DashboardLayout from "@components/dashboard-layout";
 import useAlert from "@hooks/useAlerts";
 import { trpc } from "@shared/trpc";
 import { Profile } from "@prisma/client";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { adminOnlyPage } from "@shared/auth";
 
 function getProfile(role: string) {
   switch (role) {
@@ -117,6 +118,10 @@ const ListaUsuario: NextPage = () => {
       </div>
     </div>
   </DashboardLayout >
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return adminOnlyPage(context)
 }
 
 export default ListaUsuario
