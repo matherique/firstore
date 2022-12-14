@@ -9,12 +9,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import useAlert from "@hooks/useAlerts";
 import { useRouter } from "next/router";
 import { join } from "path";
+import useAuth from "@hooks/useAuth";
 
 const Home: NextPage = () => {
   const route = useRouter()
+  const { isLoggedIn } = useAuth()
   const { register, handleSubmit } = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
+
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      route.push("/dashboard")
+    }
+  }, [isLoggedIn, route])
+
 
   const { error } = useAlert()
 

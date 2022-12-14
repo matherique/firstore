@@ -16,7 +16,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       <aside className="w-72 bg-[#000000]" aria-label="Sidebar">
         <div className="overflow-y-auto py-4 px-3">
           <a href="" className="flex items-center pl-2.5 mb-5 w-full">
-            <Image src={Logo} alt="logo" width={200} height={100} />
+            <Link href="/dashboard"><Image src={Logo} alt="logo" width={200} height={100} /></Link>
           </a>
           <div className="flex items-center pl-2.5 mb-5">
             <div className="flex items-center justify-center rounded-full p-3 bg-slate-800">
