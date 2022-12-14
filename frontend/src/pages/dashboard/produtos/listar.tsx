@@ -18,16 +18,17 @@ const ListarProdutos: NextPage = () => {
     page: page
   }]);
   const { mutate: deleteProduct } = trpc.useMutation("product.delete");
-  const { success } = useAlert()
+  const { success, error } = useAlert()
 
   const handleDelete = useCallback((id: string) => {
     deleteProduct({ id }, {
       onSuccess: () => {
         success("Produto deletado com sucesso!")
         refetch()
-      }
+      },
+      onError: () => { error("Erro ao deletar produto") }
     })
-  }, [deleteProduct, refetch, success])
+  }, [deleteProduct, refetch, success, error])
 
   const shouldNextPage = products?.length === DEFAULT_QUANTITY
   const shouldPrevPage = page > 1

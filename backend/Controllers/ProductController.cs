@@ -141,7 +141,7 @@ namespace backend.Controllers
 
                 await _context.SaveChangesAsync();
 
-                return Ok(product);
+                return Ok();
             }
             catch (Exception e)
             {

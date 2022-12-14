@@ -54,9 +54,9 @@ export const productRouter = createRouter().query("getAll", {
       },
     }).catch((err) => console.log(err))
 
-    if (!result) throw new Error("could not delete product")
+    if (!result || result.status !== 200) throw new Error("could not delete product")
 
-    return await result.json()
+    return
   }
 }).query("get", {
   input: getByIdSchema,
