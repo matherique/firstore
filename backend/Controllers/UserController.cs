@@ -140,7 +140,7 @@ namespace backend.Controllers
             {
                 User user = await _context.User.FindAsync(id);
 
-                user.status = false;
+                user.status = !user.status;
                 user.updatedAt = DateTime.Now;
 
                 await _context.SaveChangesAsync();

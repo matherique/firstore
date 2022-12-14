@@ -5,7 +5,7 @@ import { Profile } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import { useCallback, useState } from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaCheck, FaEdit, FaPen, FaStop, FaTrash } from "react-icons/fa";
 import { adminOnlyPage } from "@shared/auth";
 import useAuth from "@hooks/useAuth";
 
@@ -38,10 +38,10 @@ const ListaUsuario: NextPage = () => {
   const handleDelete = useCallback((id: string) => {
     deleteUser({ id }, {
       onSuccess: () => {
-        success("Usuário deletado com sucesso")
+        success("Status alterado com sucesso")
         refetch()
       },
-      onError: () => { error("Erro ao deletar usuário") }
+      onError: () => { error("Erro ao alterar status do usuário") }
     });
   }, [deleteUser, error, refetch, success])
 
@@ -86,11 +86,12 @@ const ListaUsuario: NextPage = () => {
               <td>{user.status ? "Ativo" : "Inativo"}</td>
               <td className="flex items-center gap-2">
                 <Link href={`/dashboard/usuarios/editar/${user.id}`}>
-                  <FaEdit size={30} color="#1e40af" />
+                  <FaPen size={23} color="#1e40af" />
                 </Link>
                 {user.id === id ? null : (
-                  < span className="cursor-pointer" onClick={() => handleDelete(user.id)}>
-                    <FaTrash size={23} color="#991b1b" />
+                  <span className="cursor-pointer" onClick={() => handleDelete(user.id)}>
+                    {user.status ? <FaStop size={23} color="#991b1b" /> :
+                      <FaCheck size={23} color="#15803d" />}
                   </span>)}
               </td>
             </tr>
