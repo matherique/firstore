@@ -4,14 +4,20 @@ import { createSchema } from "@shared/validations/stock";
 import { createRouter } from "./context";
 import { ProductsWithQuantity } from "./types";
 
+const STOCK_MIN_QUANTITY = 50
+
 export const stockRouter = createRouter().query("getAll", {
   input: getAllQuerySchema,
-  async resolve({ input: { query, quantity, page } }) {
+  async resolve({ input: { query, quantity, page, maxQuantity } }) {
 
     const url = new URL("http://localhost:1355/stock")
     url.searchParams.set("query", query!)
     url.searchParams.set("quantity", quantity.toString())
     url.searchParams.set("page", page.toString())
+
+    if (maxQuantity) {
+      url.searchParams.set("maxQuantity", STOCK_MIN_QUANTITY.toString())
+    }
 
     const result = await fetch(url.toString(), {
       headers: {
@@ -21,7 +27,7 @@ export const stockRouter = createRouter().query("getAll", {
 
     if (!result || result.status !== 200) throw new Error("could not get products stock")
 
-    return await result.json() as ProductsWithQuantity[]
+    return await result.json() as ProductsWithQuantity
   }
 }).query("get", {
   input: getByIdSchema,

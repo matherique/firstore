@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using backend.Models;
+using System.Collections.Generic;
 
 namespace backend.Controllers
 {
@@ -19,7 +20,7 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> index([FromQuery] string query, [FromQuery] int page, [FromQuery] int quantity)
+        public async Task<IActionResult> index([FromQuery] string query, [FromQuery] int page, [FromQuery] int quantity, [FromQuery] int maxQuantity)
         {
             if (query == null)
             {
@@ -53,22 +54,27 @@ namespace backend.Controllers
                 .Select(m => new Stock { productId = m.Key, quantity = m.Sum(m => m.quantity) })
                 .ToArrayAsync();
 
-            GetProductResponse[] response = new GetProductResponse[products.Length];
+            List<GetProductResponse> response = new List<GetProductResponse>();
 
             for (int i = 0; i < products.Length; i++)
             {
                 Stock stock = stocks.FirstOrDefault(m => m.productId == products[i].id);
 
-                response[i] = new GetProductResponse
+                if (maxQuantity > 0 && stock != null && stock.quantity > maxQuantity)
+                {
+                    continue;
+                }
+
+                response.Add(new GetProductResponse
                 {
                     id = products[i].id,
                     name = products[i].name,
                     price = products[i].price,
                     quantity = stock != null ? stock.quantity : 0
-                };
+                });
             }
 
-            return Ok(response);
+            return Ok(response.ToList());
         }
 
         [HttpGet("{id}")]

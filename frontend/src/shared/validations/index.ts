@@ -4,6 +4,7 @@ export const getAllQuerySchema = z.object({
   query: z.string().optional(),
   page: z.number(),
   quantity: z.number().min(1).max(100),
+  maxQuantity: z.number().optional(),
 })
 
 export const deleteByIdSchema = z.object({

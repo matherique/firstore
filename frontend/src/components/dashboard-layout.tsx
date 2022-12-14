@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Logo from "@public/logo.png";
-import { FaUserFriends, FaBox, FaShoppingBag, FaUser } from "react-icons/fa";
+import { FaUserFriends, FaBox, FaShoppingBag, FaUser, FaFileAlt } from "react-icons/fa";
 import Link from "next/link";
 import useAuth from "@hooks/useAuth";
 import { profile } from "console";
@@ -11,23 +11,27 @@ import { toProfilePTBR } from "@shared/convert";
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
 
+  if (!user) {
+    return <div>Carregando...</div>;
+  }
+
   return (
     <div className="flex w-screen h-screen">
       <aside className="w-72 bg-[#000000]" aria-label="Sidebar">
         <div className="overflow-y-auto py-4 px-3">
-          <a href="" className="flex items-center pl-2.5 mb-5 w-full">
-            <Link href="/dashboard"><Image src={Logo} alt="logo" width={200} height={100} /></Link>
-          </a>
+          <Link href="/dashboard" className="flex items-center pl-2.5 mb-5 w-full">
+            <Image src={Logo} alt="logo" width={200} height={100} />
+          </Link>
           <div className="flex items-center pl-2.5 mb-5">
             <div className="flex items-center justify-center rounded-full p-3 bg-slate-800">
               <FaUser size={20} color="#fff" />
             </div>
             <div className="ml-3 w-full">
               <div className="text-base font-medium text-white w-full">
-                {user?.name}
+                {user.name}
               </div>
               <div className="text-sm font-medium text-slate-400 w-full">
-                {toProfilePTBR(user?.profile || "")}
+                {toProfilePTBR(user.profile || "")}
               </div>
               <p onClick={() => signOut({ callbackUrl: "/" })} className="text-sm font-medium text-white hover:underline cursor-pointer">
                 Sair
@@ -71,6 +75,19 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                 </span>
               </Link>
             </li>
+            {user?.profile === Profile.ADMINISTRATOR ? (
+              <li>
+                <Link
+                  href="/dashboard/relatórios/listar"
+                  className="group flex items-center p-2 text-base font-normal text-slate-900 rounded-lg dark:text-white hover:bg-slate-800 dark:hover:bg-slate-800 hover:text-white"
+                >
+                  <FaFileAlt size={26} color="#FFFFFF" />
+                  <span className="flex-1 ml-3 whitespace-nowrap text-white group-hover:text-white">
+                    Relatórios
+                  </span>
+                </Link>
+              </li>
+            ) : null}
           </ul>
         </div>
       </aside >
