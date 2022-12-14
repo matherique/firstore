@@ -23,7 +23,6 @@ const CadastrarUsuario: NextPage = () => {
 
 
   const onSubmit = useCallback(async (data: CreateUserType) => {
-    console.log(data)
     createUser(data, {
       onSuccess: () => {
         success("Usuário criado com sucesso!")

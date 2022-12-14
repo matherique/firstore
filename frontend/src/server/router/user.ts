@@ -24,7 +24,7 @@ export const userRouter = createRouter()
         headers: {
           "Content-Type": "application/json",
         },
-      }).catch((err) => console.log(err))
+      }).catch((err) => console.error(err))
 
       if (!result) throw new Error("could not update user")
 
@@ -45,7 +45,7 @@ export const userRouter = createRouter()
           password: input.password,
           profile: input.profile,
         }),
-      }).catch((err) => console.log(err))
+      }).catch((err) => console.error(err))
 
       if (!result) throw new Error("could not create user")
 
@@ -59,7 +59,7 @@ export const userRouter = createRouter()
         headers: {
           "Content-Type": "application/json",
         },
-      }).catch((err) => console.log(err))
+      }).catch((err) => console.error(err))
 
       if (!result) throw new Error("could not delete user")
 
@@ -73,7 +73,7 @@ export const userRouter = createRouter()
         headers: {
           "Content-Type": "application/json",
         },
-      }).catch((err) => console.log(err))
+      }).catch((err) => console.error(err))
 
       if (!result) throw new Error("could not delete user")
 
@@ -93,7 +93,7 @@ export const userRouter = createRouter()
           password: input.password,
           profile: input.profile,
         }),
-      }).catch((err) => console.log(err))
+      }).catch((err) => console.error(err))
 
       if (!result) throw new Error("could not update user")
 

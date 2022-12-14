@@ -110,7 +110,7 @@ const AlterarEstoque: NextPage = () => {
               </tr> :
               historicStock?.map((stock) =>
                 <tr key={stock.id} className="text-1xl">
-                  <td>{stock.createdAt.toLocaleDateString()}</td>
+                  <td>{new Date(stock.createdAt).toLocaleDateString()}</td>
                   <td className={stock.quantity > 0 ? "text-green-500" : "text-red-500"}>
                     {stock.quantity}
                   </td>

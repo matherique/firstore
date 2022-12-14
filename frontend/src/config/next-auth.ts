@@ -27,7 +27,7 @@ export const nextAuthConfig: NextAuthOptions = {
             email: creds.email,
             password: creds.password,
           }),
-        }).catch((err) => console.log(err))
+        }).catch((err) => console.error(err))
 
         if (!result) {
           return null;

@@ -1,101 +1,57 @@
-import { Prisma, Product, Stock } from "@prisma/client";
+import { Stock } from "@prisma/client";
 import { getAllQuerySchema, getByIdSchema } from "@shared/validations";
 import { createSchema } from "@shared/validations/stock";
 import { createRouter } from "./context";
+import { ProductsWithQuantity } from "./types";
 
 export const stockRouter = createRouter().query("getAll", {
   input: getAllQuerySchema,
   async resolve({ input: { query, quantity, page } }) {
-    let products: Product[] | undefined = []
 
-    let common: Prisma.SelectSubset<Prisma.ProductFindManyArgs, Prisma.ProductFindManyArgs> = {
-      take: quantity,
-      skip: quantity * (page - 1),
-      orderBy: {
-        name: "asc",
+    const url = new URL("http://localhost:1355/stock")
+    url.searchParams.set("query", query!)
+    url.searchParams.set("quantity", quantity.toString())
+    url.searchParams.set("page", page.toString())
+
+    const result = await fetch(url.toString(), {
+      headers: {
+        "Content-Type": "application/json",
       },
-    }
+    }).catch((err) => console.error(err))
 
-    if (query) {
-      products = await prisma?.product.findMany({
-        where: {
-          name: {
-            contains: query
-          }
-        },
-        ...common
-      })
-    } else {
-      products = await prisma?.product.findMany({
-        ...common
-      })
-    }
+    if (!result || result.status !== 200) throw new Error("could not get products stock")
 
-    if (!products) throw new Error("could not find products")
-
-    const stocks = await prisma?.stock.groupBy({
-      by: ["productId"],
-      _sum: {
-        quantity: true
-      },
-      where: {
-        productId: {
-          in: products.map(product => product.id)
-        }
-      }
-    })
-
-    if (!stocks) {
-      return []
-    }
-
-    let productsStock = products.map(product => {
-      const stock = stocks.find(stock => stock.productId === product.id)
-
-      if (!stock) {
-        return {
-          ...product,
-          quantity: 0
-        }
-      }
-
-      return {
-        ...product,
-        quantity: stock?._sum?.quantity || 0
-      }
-    })
-
-    return productsStock
+    return await result.json() as ProductsWithQuantity[]
   }
 }).query("get", {
   input: getByIdSchema,
   async resolve({ input }) {
-    const stock = await prisma?.stock.findMany({
-      where: {
-        productId: {
-          in: input.id
-        }
-      }
-    })
+    const result = await fetch(`http://localhost:1355/stock/${input.id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).catch((err) => console.error(err))
 
-    if (!stock) {
-      return []
-    }
+    if (!result || result.status !== 200) throw new Error("could not get stocks")
 
-    return stock
+    return await result.json() as Stock[]
   }
 }).mutation("create", {
   input: createSchema,
   async resolve({ input }) {
-    const stock = await prisma?.stock.create({
-      data: {
+    const result = await fetch("http://localhost:1355/stock", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         productId: input.productId,
-        quantity: input.quantity
-      }
-    })
+        quantity: input.quantity,
+      }),
+    }).catch((err) => console.error(err))
 
-    if (!stock) throw new Error("could not create stock")
+    if (!result || result.status !== 200) throw new Error("could not create stock")
 
-    return stock
+    return await result.json() as Stock
   }
 })

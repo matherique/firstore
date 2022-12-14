@@ -1,10 +1,9 @@
-import { Prisma, Product } from "@prisma/client";
+import { Product } from "@prisma/client";
 import { getAllQuerySchema, getByIdSchema } from "@shared/validations";
 import { createSchema, updateProductSchema } from "@shared/validations/product";
 import { deleteByIdSchema } from "@shared/validations";
 import { createRouter } from "./context";
-
-type ProductWithQuantity = Product & { quantity: number }
+import { ProductWithQuantity } from "./types";
 
 export const productRouter = createRouter().query("getAll", {
   input: getAllQuerySchema,
@@ -20,7 +19,7 @@ export const productRouter = createRouter().query("getAll", {
       headers: {
         "Content-Type": "application/json",
       },
-    }).catch((err) => console.log(err))
+    }).catch((err) => console.error(err))
 
     if (!result) throw new Error("could not get products")
 
@@ -38,7 +37,7 @@ export const productRouter = createRouter().query("getAll", {
         name: name,
         price: price,
       }),
-    }).catch((err) => console.log(err))
+    }).catch((err) => console.error(err))
 
     if (!result) throw new Error("could not create product")
 
@@ -52,7 +51,7 @@ export const productRouter = createRouter().query("getAll", {
       headers: {
         "Content-Type": "application/json",
       },
-    }).catch((err) => console.log(err))
+    }).catch((err) => console.error(err))
 
     if (!result || result.status !== 200) throw new Error("could not delete product")
 
@@ -66,7 +65,7 @@ export const productRouter = createRouter().query("getAll", {
       headers: {
         "Content-Type": "application/json",
       },
-    }).catch((err) => console.log(err))
+    }).catch((err) => console.error(err))
 
     if (!result) throw new Error("could not delete product")
 
@@ -84,7 +83,7 @@ export const productRouter = createRouter().query("getAll", {
         name: input.name,
         price: input.price,
       }),
-    }).catch((err) => console.log(err))
+    }).catch((err) => console.error(err))
 
     if (!result) throw new Error("could not update product")
 
