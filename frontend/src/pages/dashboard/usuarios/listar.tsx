@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useCallback, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { adminOnlyPage } from "@shared/auth";
+import useAuth from "@hooks/useAuth";
 
 function getProfile(role: string) {
   switch (role) {
@@ -30,6 +31,7 @@ const ListaUsuario: NextPage = () => {
     page: page
   }]);
   const { success, error } = useAlert()
+  const { id } = useAuth();
 
   const { mutate: deleteUser } = trpc.useMutation(["user.delete"]);
 
@@ -86,9 +88,10 @@ const ListaUsuario: NextPage = () => {
                 <Link href={`/dashboard/usuarios/editar/${user.id}`}>
                   <FaEdit size={30} color="#1e40af" />
                 </Link>
-                <span className="cursor-pointer" onClick={() => handleDelete(user.id)}>
-                  <FaTrash size={23} color="#991b1b" />
-                </span>
+                {user.id === id ? null : (
+                  < span className="cursor-pointer" onClick={() => handleDelete(user.id)}>
+                    <FaTrash size={23} color="#991b1b" />
+                  </span>)}
               </td>
             </tr>
           ))}

@@ -1,4 +1,6 @@
 import DashboardLayout from "@components/dashboard-layout";
+import useAuth from "@hooks/useAuth";
+import { Profile } from "@prisma/client";
 import { trpc } from "@shared/trpc";
 import { NextPage } from "next";
 import Link from "next/link";
@@ -23,6 +25,8 @@ const Home: NextPage = () => {
   const shouldNextPage = products && products.length === DEFAULT_QUANTITY
   const shouldPrevPage = page && page > 1
 
+  const { user } = useAuth()
+
   return (
     <DashboardLayout>
       <h1 className="text-4xl font-bold">Bem vindo</h1>
@@ -41,11 +45,14 @@ const Home: NextPage = () => {
               className="w-full py-10 bg-slate-600 text-white font-medium text-xl leading-snug uppercase rounded shadow-md hover:bg-slate-800 hover:shadow-lg focus:bg-slate-800 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-slate-800 active:shadow-lg transition duration-150 ease-in-out"
             >Editar estoque</button>
           </div>
-          <div className="w-full flex-col mt-4 bg-green-700">
-            <button
-              onClick={() => route.push("/dashboard/relatorios/listar")}
-              className="w-full py-10 bg-slate-600 text-white font-medium text-xl leading-snug uppercase rounded shadow-md hover:bg-slate-800 hover:shadow-lg focus:bg-slate-800 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-slate-800 active:shadow-lg transition duration-150 ease-in-out"
-            >Relatórios</button>
+          <div className="w-full flex-col mt-4">
+            {user?.profile === Profile.ADMINISTRATOR && (
+              <button
+                onClick={() => route.push("/dashboard/relatorios/listar")}
+                className="w-full py-10 bg-slate-600 text-white font-medium text-xl leading-snug uppercase rounded shadow-md hover:bg-slate-800 hover:shadow-lg focus:bg-slate-800 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-slate-800 active:shadow-lg transition duration-150 ease-in-out"
+              >
+                Relatórios
+              </button>)}
           </div>
         </div>
 
