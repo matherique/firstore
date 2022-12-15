@@ -11,6 +11,7 @@ import { ToastContainer } from 'react-toastify';
 
 const MyApp: AppType = ({
   Component,
+  // @ts-ignore
   pageProps: { session, ...pageProps },
 }) => {
   return (
