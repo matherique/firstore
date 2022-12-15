@@ -10,7 +10,7 @@ export const productRouter = createRouter().query("getAll", {
   async resolve(req) {
     const { input: { query, quantity, page } } = req
 
-    const url = new URL("http://localhost:1355/product")
+    const url = new URL(`${process.env.API_ENDPOINT}/product`)
     url.searchParams.set("query", query!)
     url.searchParams.set("quantity", quantity.toString())
     url.searchParams.set("page", page.toString())
@@ -28,7 +28,7 @@ export const productRouter = createRouter().query("getAll", {
 }).mutation("create", {
   input: createSchema,
   async resolve({ input: { name, price } }) {
-    const result = await fetch(`http://localhost:1355/product`, {
+    const result = await fetch(`${process.env.API_ENDPOINT}/product`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export const productRouter = createRouter().query("getAll", {
 }).mutation("delete", {
   input: deleteByIdSchema,
   async resolve({ input }) {
-    const result = await fetch(`http://localhost:1355/product/${input.id}`, {
+    const result = await fetch(`${process.env.API_ENDPOINT}/product/${input.id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -60,7 +60,7 @@ export const productRouter = createRouter().query("getAll", {
 }).query("get", {
   input: getByIdSchema,
   async resolve({ input }) {
-    const result = await fetch(`http://localhost:1355/product/${input.id}`, {
+    const result = await fetch(`${process.env.API_ENDPOINT}/product/${input.id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -74,7 +74,7 @@ export const productRouter = createRouter().query("getAll", {
 }).mutation("update", {
   input: updateProductSchema,
   async resolve({ input }) {
-    const result = await fetch(`http://localhost:1355/product/${input.id}`, {
+    const result = await fetch(`${process.env.API_ENDPOINT}/product/${input.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

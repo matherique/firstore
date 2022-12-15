@@ -10,7 +10,7 @@ export const stockRouter = createRouter().query("getAll", {
   input: getAllQuerySchema,
   async resolve({ input: { query, quantity, page, maxQuantity } }) {
 
-    const url = new URL("http://localhost:1355/stock")
+    const url = new URL(`${process.env.API_ENDPOINT}/stock`)
     url.searchParams.set("query", query!)
     url.searchParams.set("quantity", quantity.toString())
     url.searchParams.set("page", page.toString())
@@ -32,7 +32,7 @@ export const stockRouter = createRouter().query("getAll", {
 }).query("get", {
   input: getByIdSchema,
   async resolve({ input }) {
-    const result = await fetch(`http://localhost:1355/stock/${input.id}`, {
+    const result = await fetch(`${process.env.API_ENDPOINT}/stock/${input.id}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -45,7 +45,7 @@ export const stockRouter = createRouter().query("getAll", {
 }).mutation("create", {
   input: createSchema,
   async resolve({ input }) {
-    const result = await fetch("http://localhost:1355/stock", {
+    const result = await fetch(`${process.env.API_ENDPOINT}/stock`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

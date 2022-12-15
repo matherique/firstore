@@ -22,7 +22,7 @@ const ListarRelatorios: NextPage = () => {
             <td>Relatório de produtos do estoque</td>
             <td>
               <Link
-                href="http://localhost:1355/stock/report"
+                href="process.env.API_ENDPOINTstock/report"
                 className="text-blue-900 hover:underline"
               >
                 Download

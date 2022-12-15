@@ -15,7 +15,7 @@ export const userRouter = createRouter()
     input: getAllQuerySchema,
     async resolve({ input: { query, quantity, page } }) {
 
-      const url = new URL("http://localhost:1355/user")
+      const url = new URL(`${process.env.API_ENDPOINT}/user`)
       url.searchParams.set("query", query!)
       url.searchParams.set("quantity", quantity.toString())
       url.searchParams.set("page", page.toString())
@@ -34,7 +34,7 @@ export const userRouter = createRouter()
   }).mutation("create", {
     input: createSchema,
     async resolve({ input }) {
-      const result = await fetch("http://localhost:1355/user", {
+      const result = await fetch(`${process.env.API_ENDPOINT}/user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export const userRouter = createRouter()
   }).mutation("delete", {
     input: deleteByIdSchema,
     async resolve({ input }) {
-      const result = await fetch(`http://localhost:1355/user/${input.id}`, {
+      const result = await fetch(`${process.env.API_ENDPOINT}/user/${input.id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -68,7 +68,7 @@ export const userRouter = createRouter()
   }).query("get", {
     input: z.string(),
     async resolve({ input: id }) {
-      const result = await fetch(`http://localhost:1355/user/${id}`, {
+      const result = await fetch(`${process.env.API_ENDPOINT}/user/${id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -82,7 +82,7 @@ export const userRouter = createRouter()
   }).mutation("update", {
     input: updateSchema,
     async resolve({ input }) {
-      const result = await fetch(`http://localhost:1355/user/${input.id}`, {
+      const result = await fetch(`${process.env.API_ENDPOINT}/user/${input.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

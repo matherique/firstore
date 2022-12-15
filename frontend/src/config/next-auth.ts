@@ -18,7 +18,7 @@ export const nextAuthConfig: NextAuthOptions = {
       async authorize(credentials, req) {
         const creds = await loginSchema.parseAsync(credentials);
 
-        const result = await fetch("http://localhost:1355/user/login", {
+        const result = await fetch("process.env.API_ENDPOINTuser/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
