@@ -1,4 +1,4 @@
-import { Profile } from "@prisma/client";
+import { Profile } from "@models";
 import { profile } from "console";
 
 export async function toArrayBuffer(file: File): Promise<ArrayBuffer> {

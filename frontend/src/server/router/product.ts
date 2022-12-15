@@ -1,9 +1,9 @@
-import { Product } from "@prisma/client";
 import { getAllQuerySchema, getByIdSchema } from "@shared/validations";
 import { createSchema, updateProductSchema } from "@shared/validations/product";
 import { deleteByIdSchema } from "@shared/validations";
 import { createRouter } from "./context";
 import { ProductWithQuantity } from "./types";
+import { Product } from "@models";
 
 export const productRouter = createRouter().query("getAll", {
   input: getAllQuerySchema,

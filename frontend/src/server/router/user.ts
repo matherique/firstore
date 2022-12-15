@@ -5,10 +5,10 @@ import {
   createSchema,
   updateSchema,
 } from "@shared/validations/user";
-import { Product, User } from "@prisma/client";
 import { createRouter } from "./context";
 import { z } from "zod";
 import { deleteByIdSchema, getAllQuerySchema } from "@shared/validations";
+import { User } from "@models";
 
 export const userRouter = createRouter()
   .query("getAll", {

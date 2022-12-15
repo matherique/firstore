@@ -1,4 +1,4 @@
-import { Product } from "@prisma/client";
+import { Product } from "@models"
 
 export type ProductWithQuantity = Product & { quantity: number }
 

@@ -1,4 +1,4 @@
-import { Profile } from '@prisma/client';
+import { Profile } from '@models';
 import { GetServerSideProps } from 'next'
 import { getSession } from 'next-auth/react'
 

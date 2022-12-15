@@ -3,10 +3,9 @@ import Logo from "@public/logo.png";
 import { FaUserFriends, FaBox, FaShoppingBag, FaUser, FaFileAlt } from "react-icons/fa";
 import Link from "next/link";
 import useAuth from "@hooks/useAuth";
-import { profile } from "console";
-import { Profile } from "@prisma/client";
-import { signOut } from "next-auth/react";
+import { profile } from "console"; import { signOut } from "next-auth/react";
 import { toProfilePTBR } from "@shared/convert";
+import { Profile } from "@models";
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();

@@ -5,11 +5,11 @@ import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { UpdateUserType } from "@shared/validations/user";
 import useAlert from "@hooks/useAlerts";
-import { Profile } from "@prisma/client";
 import { useRouter } from "next/router";
 import { FaMeteor } from "react-icons/fa";
 import Link from "next/link";
 import { adminOnlyPage } from "@shared/auth";
+import { Profile } from "@models";
 
 function toProfile(profile: string): Profile {
   let res: Profile = Profile.ENPLOYEE

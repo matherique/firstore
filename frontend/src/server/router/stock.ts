@@ -1,4 +1,4 @@
-import { Stock } from "@prisma/client";
+import { Stock } from "@models";
 import { getAllQuerySchema, getByIdSchema } from "@shared/validations";
 import { createSchema } from "@shared/validations/stock";
 import { createRouter } from "./context";

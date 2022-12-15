@@ -5,9 +5,9 @@ import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { CreateUserType } from "@shared/validations/user";
 import useAlert from "@hooks/useAlerts";
-import { Profile } from "@prisma/client";
 import Link from "next/link";
 import { adminOnlyPage } from "@shared/auth";
+import { Profile } from "@models";
 
 const CadastrarUsuario: NextPage = () => {
   const {

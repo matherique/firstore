@@ -1,13 +1,13 @@
 import DashboardLayout from "@components/dashboard-layout";
 import useAlert from "@hooks/useAlerts";
 import { trpc } from "@shared/trpc";
-import { Profile } from "@prisma/client";
 import { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 import { FaCheck, FaEdit, FaPen, FaStop, FaTrash } from "react-icons/fa";
 import { adminOnlyPage } from "@shared/auth";
 import useAuth from "@hooks/useAuth";
+import { Profile } from "@models";
 
 function getProfile(role: string) {
   switch (role) {

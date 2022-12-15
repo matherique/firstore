@@ -1,6 +1,6 @@
 import DashboardLayout from "@components/dashboard-layout";
 import useAuth from "@hooks/useAuth";
-import { Profile } from "@prisma/client";
+import { Profile } from "@models";
 import { trpc } from "@shared/trpc";
 import { NextPage } from "next";
 import Link from "next/link";

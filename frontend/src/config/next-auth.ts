@@ -1,7 +1,7 @@
+import { User } from "@models";
 import { loginSchema } from "@shared/validations/user";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { User } from "@prisma/client";
 
 export const nextAuthConfig: NextAuthOptions = {
   providers: [
