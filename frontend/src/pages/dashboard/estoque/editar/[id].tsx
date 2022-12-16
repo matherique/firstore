@@ -7,6 +7,7 @@ import useAlert from "@hooks/useAlerts";
 import Link from "next/link";
 import { CreateSchema } from "@shared/validations/stock";
 import { useRouter } from "next/router";
+import { FaSpinner } from "react-icons/fa";
 
 const AlterarEstoque: NextPage = () => {
   const router = useRouter();
@@ -20,7 +21,7 @@ const AlterarEstoque: NextPage = () => {
     },
   } = useForm<CreateSchema>()
 
-  const { mutate: createStock, data } = trpc.useMutation(["stock.create"])
+  const { mutate: createStock, data, isLoading } = trpc.useMutation(["stock.create"])
   const { data: product, isLoading: isLoadingProduct, refetch: refetchProduct } = trpc.useQuery(["product.get", { id }])
   const { data: historicStock, isLoading: isLoadingHistoricStock, refetch: refetchStock } = trpc.useQuery(["stock.get", { id }])
   const { success, error } = useAlert()
@@ -85,9 +86,9 @@ const AlterarEstoque: NextPage = () => {
           </div>
           <div className="flex flex-col">
             <button
-              className="inline-block px-7 py-3 bg-green-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+              className="flex items-center justify-center px-7 py-3 bg-green-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out w-full"
             >
-              Adicionar
+              Adicionar {isLoading && <FaSpinner className="animate-spin ml-3" />}
             </button>
           </div>
         </div>

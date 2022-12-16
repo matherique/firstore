@@ -78,7 +78,7 @@ const ListaUsuario: NextPage = () => {
           </tr>
         </thead>
         <tbody>
-          {users?.map(user => (
+          {!!users ? users?.map(user => (
             <tr key={user.id}>
               <td>{user.name}</td>
               <td>{user.email}</td>
@@ -95,7 +95,9 @@ const ListaUsuario: NextPage = () => {
                   </span>)}
               </td>
             </tr>
-          ))}
+          )) : <tr>
+            <td colSpan={3} >Carregando...</td>
+          </tr>}
         </tbody>
       </table>
       <div className="flex mt-5 justify-between">

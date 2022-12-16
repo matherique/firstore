@@ -3,7 +3,6 @@ import { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import { adminOnlyPage } from "@shared/auth";
 
-
 const ListarRelatorios: NextPage = () => {
   return <DashboardLayout>
     <header className="flex gap-2 justify-between mb-10">
@@ -22,7 +21,7 @@ const ListarRelatorios: NextPage = () => {
             <td>Relatório de produtos do estoque</td>
             <td>
               <Link
-                href={`${process.env.API_ENDPOINT}stock/report`}
+                href={`https://api-firstore.azurewebsites.net/stock/report`}
                 className="text-blue-900 hover:underline"
               >
                 Download

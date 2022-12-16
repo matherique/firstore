@@ -10,10 +10,13 @@ import useAlert from "@hooks/useAlerts";
 import { useRouter } from "next/router";
 import { join } from "path";
 import useAuth from "@hooks/useAuth";
+import { FaSpinner } from "react-icons/fa";
 
 const Home: NextPage = () => {
   const route = useRouter()
   const { isLoggedIn } = useAuth()
+
+  const [isLoading, setIsloading] = React.useState(false)
   const { register, handleSubmit } = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
@@ -28,7 +31,9 @@ const Home: NextPage = () => {
   const { error } = useAlert()
 
   const onSubmit = React.useCallback(async (data: LoginSchemaType) => {
+    setIsloading(true)
     const resp = await signIn("credentials", { ...data, callbackUrl: "/dashboard/", redirect: false });
+    setIsloading(false)
 
     if (!resp?.ok) {
       error("Email ou senha inválidos")
@@ -91,11 +96,11 @@ const Home: NextPage = () => {
 
               <button
                 type="submit"
-                className="inline-block px-7 py-3 bg-slate-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-slate-800 hover:shadow-lg focus:bg-slate-800 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-slate-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+                className="flex items-center justify-center px-7 py-3 bg-slate-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-slate-800 hover:shadow-lg focus:bg-slate-800 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-slate-800 active:shadow-lg transition duration-150 ease-in-out w-full"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="light"
               >
-                Entrar
+                Entrar {isLoading && <FaSpinner className="animate-spin ml-3" />}
               </button>
             </form>
           </div>

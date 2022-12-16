@@ -10,7 +10,7 @@ const DEFAULT_QUANTITY = 20
 const ListarEstoque: NextPage = () => {
   const [page, setPage] = useState<number>(1);
   const [query, setQuery] = useState("");
-  const { data: products, refetch } = trpc.useQuery(["stock.getAll", {
+  const { data: products, refetch, isFetching } = trpc.useQuery(["stock.getAll", {
     query,
     quantity: DEFAULT_QUANTITY,
     page: page
@@ -41,7 +41,7 @@ const ListarEstoque: NextPage = () => {
           </tr>
         </thead>
         <tbody>
-          {products?.map(item => (
+          {!!products ? products?.map(item => (
             <tr key={item.id}>
               <td>{item.name}</td>
               <td>{item.quantity}</td>
@@ -51,7 +51,9 @@ const ListarEstoque: NextPage = () => {
                 </Link>
               </td>
             </tr>
-          ))}
+          )) : <tr>
+            <td colSpan={3} >Carregando...</td>
+          </tr>}
         </tbody>
       </table>
       <div className="flex mt-5 justify-between">

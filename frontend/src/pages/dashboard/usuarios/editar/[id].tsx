@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { UpdateUserType } from "@shared/validations/user";
 import useAlert from "@hooks/useAlerts";
 import { useRouter } from "next/router";
-import { FaMeteor } from "react-icons/fa";
+import { FaMeteor, FaSpinner } from "react-icons/fa";
 import Link from "next/link";
 import { adminOnlyPage } from "@shared/auth";
 import { Profile } from "@models";
@@ -38,7 +38,7 @@ const EditarUsuario: NextPage = () => {
   } = useForm<UpdateUserType>()
 
   const { data: user, isSuccess } = trpc.useQuery(["user.get", id])
-  const { mutate: updateUser } = trpc.useMutation(["user.update"])
+  const { mutate: updateUser, isLoading } = trpc.useMutation(["user.update"])
   const { success, error } = useAlert()
 
   useEffect(() => {
@@ -134,9 +134,9 @@ const EditarUsuario: NextPage = () => {
           </div>
           <div className="flex flex-col">
             <button
-              className="inline-block px-7 py-3 bg-green-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+              className="flex items-center justify-center px-7 py-3 bg-green-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out w-full"
             >
-              Salvar
+              Salvar {isLoading && <FaSpinner className="animate-spin ml-3" />}
             </button>
           </div>
         </div>

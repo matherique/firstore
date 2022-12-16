@@ -8,6 +8,7 @@ import useAlert from "@hooks/useAlerts";
 import Link from "next/link";
 import { adminOnlyPage } from "@shared/auth";
 import { Profile } from "@models";
+import { FaSpinner } from "react-icons/fa";
 
 const CadastrarUsuario: NextPage = () => {
   const {
@@ -18,7 +19,7 @@ const CadastrarUsuario: NextPage = () => {
     },
   } = useForm<CreateUserType>()
 
-  const { mutate: createUser, data } = trpc.useMutation(["user.create"])
+  const { mutate: createUser, data, isLoading } = trpc.useMutation(["user.create"])
   const { success, error } = useAlert()
 
 
@@ -94,9 +95,9 @@ const CadastrarUsuario: NextPage = () => {
           </div>
           <div className="flex flex-col">
             <button
-              className="inline-block px-7 py-3 bg-green-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+              className="flex items-center justify-center px-7 py-3 bg-green-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out w-full"
             >
-              Cadastrar
+              Cadastrar {isLoading && <FaSpinner className="animate-spin ml-3" />}
             </button>
           </div>
         </div>

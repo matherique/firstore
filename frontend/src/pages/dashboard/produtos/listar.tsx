@@ -61,7 +61,7 @@ const ListarProdutos: NextPage = () => {
           </tr>
         </thead>
         <tbody>
-          {products?.map(product => (
+          {!!products ? products?.map(product => (
             <tr key={product.id}>
               <td>{product.name}</td>
               <td>{toBRL(product.price)}</td>
@@ -74,7 +74,7 @@ const ListarProdutos: NextPage = () => {
                 </span>
               </td>
             </tr>
-          )) || <tr><td colSpan={3}>Nenhum produto encontrado</td></tr>}
+          )) : <tr><td colSpan={3}>Carregando...</td></tr>}
         </tbody>
       </table>
       <div className="flex mt-5 justify-between">
